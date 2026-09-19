@@ -75,6 +75,13 @@ that the client and the server are replaceable rather than foundational.
 
 ## Verification
 
+Every command above was executed in order on a fresh `git clone`, not read over.
+
 | Date | Platform | Result |
 |---|---|---|
-| — | — | not yet verified on a clean checkout |
+| 2026-09-19 | macOS 27.0 arm64, rustc 1.93.0 | all 6 steps pass |
+
+The first such run failed: `doc world` reported a false `unresolved_reference` because it
+ignored the `items.json` beside the file. That is the whole argument for executing this
+document rather than maintaining it. Re-verify after any change to the build, the layout or
+the toolchain requirement, and record the result here.

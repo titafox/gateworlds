@@ -79,6 +79,10 @@ Requirements:
 Anyone must be able to go from a clean clone to a running client, a running server, and
 passing tests using only written commands, on a machine that has never seen this project.
 
+[`BOOTSTRAP.md`](BOOTSTRAP.md) is that document, and it carries the date it was last
+executed. Its first execution failed on the third command it documented — proof that the
+distinction between a written procedure and a verified one is not pedantry.
+
 The test is not "the instructions look complete." The test is running them on a clean
 checkout and fixing whatever breaks. Undocumented environment knowledge is the most common
 way a project becomes unmaintainable while looking perfectly healthy.
@@ -152,7 +156,7 @@ Ordered by how much risk each one removes today.
 - [x] Off the single laptop — published at `titafox/gateworlds` (§2.4)
 - [ ] **A second, unaffiliated public host** (§2.4) — highest severity open item
 - [ ] **Move to an organisation** so ownership is not one personal account (§2.4, §3.1)
-- [ ] **Verify the bootstrap instructions on a clean checkout** (§2.5)
+- [x] Bootstrap instructions verified by running them on a clean checkout (§2.5) — see [BOOTSTRAP.md](BOOTSTRAP.md)
 - [ ] `docs/INFRASTRUCTURE.md` inventory, no secrets (§2.6)
 - [x] Licences that need no permission to continue under (§2.1)
 - [x] Executable protocol specification with conformance vectors (§2.2)
