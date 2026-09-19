@@ -2,7 +2,10 @@
   "$vector": {
     "kind": "items",
     "expect": "valid",
-    "note": "Item props carry world-specific meaning (spirit_qi). No other world is required to understand it, and no implementation may require it."
+    "note": "Item props carry world-specific meaning (spirit_qi). No other world is required to understand it, and no implementation may require it.",
+    "context": {
+      "world_id": "xianxia_gate"
+    }
   },
   "document": {
     "protocol_version": "0.1.0",

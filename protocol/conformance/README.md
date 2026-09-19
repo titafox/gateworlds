@@ -50,14 +50,27 @@ A conforming runner MUST:
 
 ## Context a runner must supply
 
-Some procedural checks need context the document alone does not carry. A runner MUST
-supply it as follows, so that every implementation gets the same answer:
+Some procedural checks need context the document alone does not carry. A vector states it
+explicitly in `$vector.context`:
 
-| Check | Context |
-|---|---|
-| Item namespace (`invalid_item_namespace`) | The defining world id. For `items` vectors it is `"w"` unless the vector's world id says otherwise. |
-| `pickup.item` resolution (`unresolved_reference`) | Items defined in the same package. Vectors here ship no sibling `items.json`, so any `pickup.item` is unresolved unless the vector is marked valid, in which case the runner treats a well-formed same-namespace id as resolvable. |
-| `resource_not_found` | Not exercised by these vectors — it needs a real package directory. It is covered by the shipped-package check below. |
+```jsonc
+"context": {
+  "world_id": "xianxia_gate",          // the defining world, for items.json vectors
+  "items": ["all_components:thing"]    // item ids the runner should treat as defined
+}
+```
+
+| Field | Default when absent | Used by |
+|---|---|---|
+| `world_id` | the document's own `id`, or `"w"` for `items` vectors | `invalid_item_namespace` |
+| `items` | empty set | `unresolved_reference` on `pickup.item` |
+
+The context is stated per vector and never inferred from `expect`. A runner that decided
+how to validate by looking at the expected outcome would be arguing in a circle, and would
+pass its own vectors no matter what the validator did.
+
+`resource_not_found` is not exercised here — it needs a real package directory on disk, and
+is covered by the shipped-package check below.
 
 ## Shipped packages must also validate
 

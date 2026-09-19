@@ -1,0 +1,16 @@
+[package]
+name = "gateworlds-validate"
+description = "CLI validator and conformance runner for the Gateworlds world protocol."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "gateworlds-validate"
+path = "src/main.rs"
+
+[dependencies]
+gateworlds-protocol = { path = "../gateworlds-protocol" }
+serde_json.workspace = true

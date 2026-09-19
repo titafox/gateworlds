@@ -14,3 +14,6 @@ target/
 
 # Local only
 *.local
+
+# Rust build output lives under server/
+server/target/

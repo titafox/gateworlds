@@ -1,0 +1,12 @@
+[package]
+name = "gateworlds-protocol"
+description = "Validator for the Gateworlds world protocol. No engine dependency, no web dependency."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+serde_json.workspace = true
+jsonschema.workspace = true

@@ -8,7 +8,10 @@
         "path": "/items/0/id"
       }
     ],
-    "note": "Validated against a package whose world id is 'w'. A world may only define items in its own namespace; otherwise one world could shadow another's items."
+    "note": "Validated against a package whose world id is 'w'. A world may only define items in its own namespace; otherwise one world could shadow another's items.",
+    "context": {
+      "world_id": "w"
+    }
   },
   "document": {
     "protocol_version": "0.1.0",
