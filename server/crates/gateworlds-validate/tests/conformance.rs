@@ -129,3 +129,33 @@ fn the_two_reference_worlds_link_to_each_other() {
         );
     }
 }
+
+/// Regression: validating a `world.json` on its own must still resolve the item definitions
+/// sitting next to it.
+///
+/// Without this, every `pickup` in a real package is reported as an unresolved reference --
+/// a false positive that blames the creator for the tool's blind spot. Found by running
+/// `docs/BOOTSTRAP.md` verbatim on a clean clone, which is the only way that document is
+/// worth anything.
+#[test]
+fn validating_a_world_file_alone_resolves_its_sibling_items() {
+    use gateworlds_protocol::{DocKind, context_for_file, validate};
+
+    let file = repo_root().join("worlds/xianxia_gate/world.json");
+    let doc: serde_json::Value =
+        serde_json::from_str(&std::fs::read_to_string(&file).expect("readable")).expect("json");
+
+    let ctx = context_for_file(DocKind::World, &doc, &file);
+    assert!(
+        ctx.known_items.contains("xianxia_gate:spirit_herb"),
+        "the sibling items.json was not picked up: {:?}",
+        ctx.known_items
+    );
+
+    let report = validate(DocKind::World, &doc, &ctx);
+    assert!(
+        report.is_ok(),
+        "expected no findings, got: {:?}",
+        report.findings
+    );
+}

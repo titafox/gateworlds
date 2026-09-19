@@ -1,0 +1,50 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  protocol:
+    name: protocol conformance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install Rust
+        run: rustup toolchain install stable --profile minimal --component rustfmt,clippy
+
+      - name: Cache cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            server/target
+          key: cargo-${{ runner.os }}-${{ hashFiles('server/**/Cargo.toml') }}
+          restore-keys: cargo-${{ runner.os }}-
+
+      - name: Format
+        working-directory: server
+        run: cargo fmt --all --check
+
+      - name: Lint
+        working-directory: server
+        run: cargo clippy --all-targets -- -D warnings
+
+      # The conformance vectors and the shipped world packages both run here.
+      - name: Test
+        working-directory: server
+        run: cargo test --all
+
+      # Runs the same checks through the CLI, so the published entry point is exercised too
+      # and cannot rot while the library tests stay green.
+      - name: Conformance (CLI)
+        run: |
+          cargo build --release --manifest-path server/Cargo.toml
+          ./server/target/release/gateworlds-validate conformance protocol/conformance
+          ./server/target/release/gateworlds-validate package worlds/*

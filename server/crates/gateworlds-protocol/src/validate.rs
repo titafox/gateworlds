@@ -313,6 +313,44 @@ fn check_resource(value: Option<&Value>, ctx: &Context, path: &str, r: &mut Repo
     }
 }
 
+/// Builds the context for a document being validated from a path on disk.
+///
+/// A world package is a directory, so a `world.json` sitting next to an `items.json` has its
+/// item definitions right there. Ignoring them and then reporting every `pickup` as an
+/// unresolved reference is a false positive that blames the creator for the tool's blind
+/// spot.
+pub fn context_for_file(kind: DocKind, doc: &Value, file: &Path) -> Context {
+    let mut ctx = Context::default();
+
+    if let Some(id) = doc.get("id").and_then(Value::as_str) {
+        ctx = ctx.with_world_id(id);
+    }
+    let Some(dir) = file.parent() else { return ctx };
+    ctx = ctx.with_root(dir);
+
+    if kind == DocKind::World {
+        let sibling = dir.join("items.json");
+        if let Ok(items) = read_json(&sibling) {
+            // The world id is authoritative when the sibling file is the package's own.
+            ctx.known_items = collect_item_ids(&items);
+        }
+    }
+    ctx
+}
+
+fn collect_item_ids(items: &Value) -> BTreeSet<String> {
+    items
+        .get("items")
+        .and_then(Value::as_array)
+        .map(|a| {
+            a.iter()
+                .filter_map(|i| i.get("id").and_then(Value::as_str))
+                .map(str::to_owned)
+                .collect()
+        })
+        .unwrap_or_default()
+}
+
 // ---------------------------------------------------------------------------- packages
 
 /// Validates a world package directory: `world.json`, optional `items.json`, and the files
@@ -334,17 +372,7 @@ pub fn validate_package(dir: &Path) -> Result<Report, String> {
         None
     };
 
-    let known: BTreeSet<String> = items
-        .as_ref()
-        .and_then(|v| v.get("items"))
-        .and_then(Value::as_array)
-        .map(|a| {
-            a.iter()
-                .filter_map(|i| i.get("id").and_then(Value::as_str))
-                .map(str::to_owned)
-                .collect()
-        })
-        .unwrap_or_default();
+    let known: BTreeSet<String> = items.as_ref().map(collect_item_ids).unwrap_or_default();
 
     let ctx = Context::default()
         .with_world_id(&world_id)

@@ -8,7 +8,9 @@
 use std::path::Path;
 use std::process::ExitCode;
 
-use gateworlds_protocol::{Context, DocKind, Report, conformance, validate, validate_package};
+use gateworlds_protocol::{
+    DocKind, Report, conformance, context_for_file, validate, validate_package,
+};
 use serde_json::Value;
 
 const USAGE: &str = "\
@@ -115,13 +117,7 @@ fn run_doc(kind: &str, file: &Path) -> bool {
             return true;
         }
     };
-    let mut ctx = Context::default();
-    if let Some(id) = doc.get("id").and_then(Value::as_str) {
-        ctx = ctx.with_world_id(id);
-    }
-    if let Some(parent) = file.parent() {
-        ctx = ctx.with_root(parent);
-    }
+    let ctx = context_for_file(kind, &doc, file);
     let report = validate(kind, &doc, &ctx);
     if report.is_ok() {
         println!("  ok    {}", file.display());
