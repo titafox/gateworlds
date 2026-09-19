@@ -7,6 +7,10 @@ rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
 
+[lib]
+name = "gateworlds_validate"
+path = "src/lib.rs"
+
 [[bin]]
 name = "gateworlds-validate"
 path = "src/main.rs"
@@ -14,3 +18,7 @@ path = "src/main.rs"
 [dependencies]
 gateworlds-protocol = { path = "../gateworlds-protocol" }
 serde_json.workspace = true
+sha2.workspace = true
+
+[dev-dependencies]
+sha2.workspace = true

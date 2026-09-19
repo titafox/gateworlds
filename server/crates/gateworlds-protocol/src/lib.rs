@@ -18,4 +18,4 @@ pub mod version;
 pub use error::{ErrorCode, Finding, Report};
 pub use schema::DocKind;
 pub use validate::{COMPONENT_TYPES, Context, context_for_file, validate, validate_package};
-pub use version::{PROTOCOL_VERSION, Version};
+pub use version::{PROTOCOL_VERSION, PROTOCOL_VERSION_STRING, Version};

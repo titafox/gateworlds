@@ -5,6 +5,8 @@
 //!   gateworlds-validate package <dir>...     validate world package directories
 //!   gateworlds-validate doc <kind> <file>    validate one document (world|items|save)
 
+use gateworlds_validate::publish;
+
 use std::path::Path;
 use std::process::ExitCode;
 
@@ -19,6 +21,7 @@ gateworlds-validate -- Gateworlds world protocol validator
   gateworlds-validate conformance <dir>    run every vector under <dir>
   gateworlds-validate package <dir>...     validate world package directories
   gateworlds-validate doc <kind> <file>    validate one document (world|items|save)
+  gateworlds-validate publish <src> <out>  validate packages, then write a static registry
 ";
 
 fn main() -> ExitCode {
@@ -27,6 +30,7 @@ fn main() -> ExitCode {
         Some("conformance") if args.len() == 2 => run_conformance(Path::new(&args[1])),
         Some("package") if args.len() >= 2 => run_packages(&args[1..]),
         Some("doc") if args.len() == 3 => run_doc(&args[1], Path::new(&args[2])),
+        Some("publish") if args.len() == 3 => run_publish(Path::new(&args[1]), Path::new(&args[2])),
         _ => {
             eprint!("{USAGE}");
             return ExitCode::from(2);
@@ -142,4 +146,44 @@ fn render(report: &Report) -> String {
         s.push_str(&format!("        {}\n", f.detail));
     }
     s
+}
+
+// ------------------------------------------------------------------ publish
+
+fn run_publish(src: &Path, out: &Path) -> bool {
+    let stamp = std::process::Command::new("date")
+        .args(["-u", "+%Y-%m-%dT%H:%M:%SZ"])
+        .output()
+        .ok()
+        .and_then(|o| String::from_utf8(o.stdout).ok())
+        .map(|s| s.trim().to_string())
+        .unwrap_or_else(|| "1970-01-01T00:00:00Z".into());
+
+    match publish::build(src, out, &stamp) {
+        Err(e) => {
+            eprintln!("publish failed: {e}");
+            true
+        }
+        Ok(outcome) => {
+            for id in &outcome.published {
+                println!("  published  {id}");
+            }
+            for (name, report) in &outcome.rejected {
+                println!("  REJECTED   {name}");
+                print!("{}", render(report));
+            }
+            println!(
+                "\n{} published, {} rejected -> {}",
+                outcome.published.len(),
+                outcome.rejected.len(),
+                out.display()
+            );
+            if !outcome.rejected.is_empty() {
+                // A registry that quietly drops a package looks identical to one that never
+                // had it. Fail loudly so a broken world is noticed at publish time.
+                eprintln!("refusing to report success while a package is rejected");
+            }
+            !outcome.ok()
+        }
+    }
 }

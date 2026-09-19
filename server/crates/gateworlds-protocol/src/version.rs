@@ -9,6 +9,10 @@ pub const PROTOCOL_VERSION: Version = Version {
     patch: 0,
 };
 
+/// The same value as written in documents. Kept beside the struct so the two cannot drift;
+/// a unit test asserts they agree.
+pub const PROTOCOL_VERSION_STRING: &str = "0.1.0";
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct Version {
     pub major: u64,
@@ -91,6 +95,14 @@ mod tests {
 
     fn v(s: &str) -> Version {
         Version::parse(s).unwrap()
+    }
+
+    #[test]
+    fn the_string_and_the_struct_agree() {
+        assert_eq!(
+            Version::parse(PROTOCOL_VERSION_STRING),
+            Some(PROTOCOL_VERSION)
+        );
     }
 
     #[test]
