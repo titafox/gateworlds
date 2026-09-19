@@ -59,10 +59,14 @@ goes in `docs/adr/` with its rejected alternatives.
 
 ### 2.4 No single point of storage — **open gap**
 
-> **Status 2026-09-19:** published to https://github.com/titafox/gateworlds (public).
-> The laptop is no longer the only copy. **One host is still not two** — a mirror on an
-> unaffiliated forge remains outstanding, and the repository sits under a personal account
-> rather than an organisation, so access does not yet survive one account going away.
+> **Status 2026-09-19:** published to https://github.com/titafox/gateworlds (public), and
+> mirrored to a self-hosted server that serves it read-only over HTTP. Three copies exist.
+>
+> **That is not yet what this section asks for.** Both the GitHub repository and the mirror
+> are operated by the same person. A third copy raises the bar for accidental loss; it does
+> nothing for the case this document is about, where that person stops. What remains open:
+> a copy on a forge run by *someone else*, and ownership held by an organisation rather than
+> one personal account.
 
 Requirements:
 
@@ -73,6 +77,17 @@ Requirements:
   someone's home disappears when they move, lose interest, or lose power.
 - Mirrors MUST be pushed by the same command that pushes the primary, so they cannot
   silently rot. A mirror nobody checks is a mirror that is out of date.
+
+  Done with git's multiple push URLs, so one `git push` reaches every copy:
+
+  ```sh
+  git remote set-url --add --push origin <primary>
+  git remote set-url --add --push origin <mirror>
+  ```
+
+  A failing mirror then fails the push, loudly, instead of quietly falling behind. That is
+  the point: a mirror that can fail silently is worse than no mirror, because it looks like
+  insurance.
 
 ### 2.5 Reproducible from zero — **open gap**
 
@@ -154,10 +169,12 @@ of this project's own constitution that says otherwise is the wrong reading.
 Ordered by how much risk each one removes today.
 
 - [x] Off the single laptop — published at `titafox/gateworlds` (§2.4)
-- [ ] **A second, unaffiliated public host** (§2.4) — highest severity open item
+- [x] A self-hosted read-only mirror, pushed by the same command as the primary (§2.4)
+- [ ] **A public host operated by someone else** (§2.4) — highest severity open item;
+      a self-hosted mirror does not satisfy it
 - [ ] **Move to an organisation** so ownership is not one personal account (§2.4, §3.1)
 - [x] Bootstrap instructions verified by running them on a clean checkout (§2.5) — see [BOOTSTRAP.md](BOOTSTRAP.md)
-- [ ] `docs/INFRASTRUCTURE.md` inventory, no secrets (§2.6)
+- [x] [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md) inventory, no secrets (§2.6)
 - [x] Licences that need no permission to continue under (§2.1)
 - [x] Executable protocol specification with conformance vectors (§2.2)
 - [x] ADRs recording rejected alternatives (§2.3)
