@@ -15,6 +15,7 @@ removes a dependency.
 |---|---|---|---|
 | Canonical repository | `github.com/titafox/gateworlds` | one personal GitHub account | Under 0BSD/CC0 anyone may fork and continue. The name and URL are not recoverable without that account — a successor renames, per SUCCESSION §5. |
 | Read-only mirror | `http://185.138.186.150/gateworlds.git` | self-hosted, same person | Not independently operated. It raises the bar for accidental loss and does nothing for succession. Expect it to disappear with the operator. |
+| World registry | `http://185.138.186.150/v0/` | same host | Static files produced by `gateworlds-validate publish` — see [REGISTRY.md](REGISTRY.md). Reproducible from the repository by one command, so losing the host loses nothing but a URL. |
 
 Both are pushed by one `git push` (SUCCESSION §2.4). Neither is operated by a second party,
 which is the open item at the top of the §6 checklist.
@@ -25,6 +26,11 @@ which is the open item at the top of the §6 checklist.
 |---|---|---|
 | crates.io | Rust dependencies of `server/` | Yes — the dependency set is small and the lockfile is committed. |
 | GitHub Actions | CI | Yes — CI runs `cargo fmt`, `cargo clippy` and `cargo test`, which run anywhere. |
+
+The registry host also runs a `post-receive` hook: a push to its git mirror re-fetches,
+rebuilds, revalidates and republishes. The build is never skipped, because the schemas are
+compiled into the binary and a gate validating against a specification that no longer
+exists is worse than a late one.
 
 There is no domain, no DNS, no TLS certificate, no package registry account, no object
 storage, no database, and no paid service. That is deliberate at this stage: everything a

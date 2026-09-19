@@ -43,7 +43,12 @@ cd server && cargo build --release && cd ..
 
 # a single document
 ./server/target/release/gateworlds-validate doc world worlds/xianxia_gate/world.json
+
+# validate everything, then write a static registry any web server can serve
+./server/target/release/gateworlds-validate publish worlds /tmp/registry
 ```
+
+The registry layout is [`REGISTRY.md`](REGISTRY.md).
 
 Exit code is `0` when everything passes, `1` on any finding, `2` on bad usage — so it drops
 into CI or a pre-commit hook unchanged.
