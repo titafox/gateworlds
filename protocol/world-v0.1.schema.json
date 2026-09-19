@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:openverse:schema:world:0.1.0",
+  "title": "OpenVerse world package manifest v0.1.0",
+  "description": "Normative schema for world.json. See SPEC.md. Regex patterns here deliberately avoid lookahead/lookbehind so that engines without them (e.g. the Rust `regex` crate) can implement this schema directly. Rules that cannot be expressed without lookahead -- resource path containment, duplicate ids, reference resolution, item namespacing -- are procedural checks listed in SPEC.md section 11.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["protocol_version", "id", "display_name", "bounds", "spawns", "entities"],
+  "properties": {
+    "protocol_version": { "$ref": "#/$defs/semver" },
+    "id": { "$ref": "#/$defs/slug" },
+    "display_name": { "$ref": "#/$defs/localizedText" },
+    "description": { "$ref": "#/$defs/localizedText" },
+    "authors": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+          "contact": { "type": "string", "maxLength": 256 }
+        }
+      }
+    },
+    "license": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "code": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "assets": { "type": "string", "minLength": 1, "maxLength": 128 }
+      }
+    },
+    "bounds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height"],
+      "properties": {
+        "width": { "$ref": "#/$defs/extent" },
+        "height": { "$ref": "#/$defs/extent" }
+      }
+    },
+    "background": { "$ref": "#/$defs/color" },
+    "spawns": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 256,
+      "required": ["default"],
+      "propertyNames": { "$ref": "#/$defs/slug" },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["at"],
+        "properties": { "at": { "$ref": "#/$defs/coord" } }
+      }
+    },
+    "entities": {
+      "type": "array",
+      "maxItems": 10000,
+      "items": { "$ref": "#/$defs/entity" }
+    },
+    "props": { "$ref": "#/$defs/props" }
+  },
+
+  "$defs": {
+    "semver": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"
+    },
+    "slug": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[a-z0-9]([a-z0-9_]*[a-z0-9])?$"
+    },
+    "itemId": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 129,
+      "pattern": "^[a-z0-9]([a-z0-9_]*[a-z0-9])?:[a-z0-9]([a-z0-9_]*[a-z0-9])?$"
+    },
+    "localizedText": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 64,
+      "propertyNames": { "pattern": "^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8})*$" },
+      "additionalProperties": { "type": "string", "minLength": 1, "maxLength": 4096 }
+    },
+    "resourcePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^[A-Za-z0-9_][A-Za-z0-9_\\-./]*$",
+      "description": "Package-relative. Procedural checks additionally reject '..' segments, '//', trailing '/' or '.', and any path resolving outside the package root (invalid_resource_path)."
+    },
+    "color": { "type": "string", "pattern": "^#([0-9a-f]{6}|[0-9a-f]{8})$" },
+    "extent": { "type": "integer", "minimum": 1, "maximum": 100000 },
+    "coord": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": { "type": "integer", "minimum": -100000, "maximum": 100000 }
+    },
+    "size": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": { "$ref": "#/$defs/extent" }
+    },
+    "props": {
+      "type": "object",
+      "description": "Opaque, creator-defined. No conforming implementation may read, validate or require any key inside it. Carried and persisted verbatim."
+    },
+
+    "entity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "at", "components"],
+      "properties": {
+        "id": { "$ref": "#/$defs/slug" },
+        "at": { "$ref": "#/$defs/coord" },
+        "props": { "$ref": "#/$defs/props" },
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 16,
+          "items": { "$ref": "#/$defs/component" }
+        }
+      }
+    },
+
+    "component": {
+      "type": "object",
+      "required": ["type"],
+      "oneOf": [
+        { "$ref": "#/$defs/compSprite" },
+        { "$ref": "#/$defs/compSolid" },
+        { "$ref": "#/$defs/compPortal" },
+        { "$ref": "#/$defs/compPickup" }
+      ]
+    },
+
+    "compSprite": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "size"],
+      "oneOf": [
+        { "required": ["color"], "not": { "required": ["texture"] } },
+        { "required": ["texture"], "not": { "required": ["color"] } }
+      ],
+      "properties": {
+        "type": { "const": "sprite" },
+        "size": { "$ref": "#/$defs/size" },
+        "color": { "$ref": "#/$defs/color" },
+        "texture": { "$ref": "#/$defs/resourcePath" },
+        "z": { "type": "integer", "minimum": -1000, "maximum": 1000, "default": 0 }
+      }
+    },
+
+    "compSolid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "size"],
+      "properties": {
+        "type": { "const": "solid" },
+        "size": { "$ref": "#/$defs/size" },
+        "offset": { "$ref": "#/$defs/coord" }
+      }
+    },
+
+    "compPortal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "size", "target_world"],
+      "properties": {
+        "type": { "const": "portal" },
+        "size": { "$ref": "#/$defs/size" },
+        "offset": { "$ref": "#/$defs/coord" },
+        "target_world": { "$ref": "#/$defs/slug" },
+        "target_spawn": { "$ref": "#/$defs/slug", "default": "default" }
+      }
+    },
+
+    "compPickup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "size", "item"],
+      "properties": {
+        "type": { "const": "pickup" },
+        "size": { "$ref": "#/$defs/size" },
+        "offset": { "$ref": "#/$defs/coord" },
+        "item": { "$ref": "#/$defs/itemId" },
+        "count": { "type": "integer", "minimum": 1, "maximum": 9999, "default": 1 },
+        "once": { "type": "boolean", "default": true }
+      }
+    }
+  }
+}

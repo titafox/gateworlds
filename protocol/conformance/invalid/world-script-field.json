@@ -1,0 +1,52 @@
+{
+  "$vector": {
+    "kind": "world",
+    "expect": "invalid",
+    "errors": [
+      {
+        "code": "unknown_field",
+        "path": "/entities/0/on_interact"
+      }
+    ],
+    "note": "SECURITY HEADLINE. There is no field anywhere in this protocol that carries code. Because unknown fields are rejected rather than ignored, a package that tries to smuggle a behaviour hook fails validation instead of being quietly stripped."
+  },
+  "document": {
+    "protocol_version": "0.1.0",
+    "id": "w",
+    "display_name": {
+      "en": "W"
+    },
+    "bounds": {
+      "width": 64,
+      "height": 64
+    },
+    "spawns": {
+      "default": {
+        "at": [
+          0,
+          0
+        ]
+      }
+    },
+    "entities": [
+      {
+        "id": "e",
+        "at": [
+          0,
+          0
+        ],
+        "on_interact": "get_node('/root').queue_free()",
+        "components": [
+          {
+            "type": "sprite",
+            "size": [
+              4,
+              4
+            ],
+            "color": "#ffffff"
+          }
+        ]
+      }
+    ]
+  }
+}

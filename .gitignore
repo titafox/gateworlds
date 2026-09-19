@@ -1,0 +1,16 @@
+# Godot
+.godot/
+*.import
+export_presets.cfg
+
+# Rust
+target/
+
+# OS / editors
+.DS_Store
+*.swp
+.idea/
+.vscode/
+
+# Local only
+*.local

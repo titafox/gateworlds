@@ -1,0 +1,28 @@
+{
+  "$vector": {
+    "kind": "save",
+    "expect": "invalid",
+    "errors": [
+      {
+        "code": "unsupported_protocol_version",
+        "path": "/save_version"
+      }
+    ]
+  },
+  "document": {
+    "save_version": "0.2.0",
+    "created_at": "2026-09-19T03:00:00Z",
+    "updated_at": "2026-09-19T03:00:00Z",
+    "player": {
+      "current_world": "w",
+      "at": [
+        0,
+        0
+      ]
+    },
+    "inventory": {
+      "stacks": []
+    },
+    "item_defs": {}
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$vector": {
+    "kind": "world",
+    "expect": "valid",
+    "note": "Smallest legal world: no entities, one spawn, one language."
+  },
+  "document": {
+    "protocol_version": "0.1.0",
+    "id": "w",
+    "display_name": {
+      "en": "W"
+    },
+    "bounds": {
+      "width": 16,
+      "height": 16
+    },
+    "spawns": {
+      "default": {
+        "at": [
+          0,
+          0
+        ]
+      }
+    },
+    "entities": []
+  }
+}

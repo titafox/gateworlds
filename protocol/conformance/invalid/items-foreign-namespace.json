@@ -1,0 +1,27 @@
+{
+  "$vector": {
+    "kind": "items",
+    "expect": "invalid",
+    "errors": [
+      {
+        "code": "invalid_item_namespace",
+        "path": "/items/0/id"
+      }
+    ],
+    "note": "Validated against a package whose world id is 'w'. A world may only define items in its own namespace; otherwise one world could shadow another's items."
+  },
+  "document": {
+    "protocol_version": "0.1.0",
+    "items": [
+      {
+        "id": "some_other_world:stolen_sword",
+        "display_name": {
+          "en": "Stolen Sword"
+        },
+        "icon": {
+          "color": "#cccccc"
+        }
+      }
+    ]
+  }
+}

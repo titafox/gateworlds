@@ -1,0 +1,58 @@
+{
+  "$vector": {
+    "kind": "save",
+    "expect": "valid",
+    "note": "Two stacks of the same item id with different per-stack props. An implementation must not silently merge them, and must preserve slot order."
+  },
+  "document": {
+    "save_version": "0.1.0",
+    "created_at": "2026-09-19T03:00:00Z",
+    "updated_at": "2026-09-19T03:00:00Z",
+    "player": {
+      "current_world": "pastoral_village",
+      "at": [
+        1,
+        1
+      ]
+    },
+    "inventory": {
+      "stacks": [
+        {
+          "item": "pastoral_village:carrot",
+          "count": 2,
+          "props": {
+            "freshness": 1.0
+          }
+        },
+        {
+          "item": "pastoral_village:carrot",
+          "count": 5,
+          "props": {
+            "freshness": 0.3
+          }
+        }
+      ]
+    },
+    "item_defs": {
+      "pastoral_village:carrot": {
+        "id": "pastoral_village:carrot",
+        "display_name": {
+          "zh-CN": "胡萝卜",
+          "en": "Carrot",
+          "ru": "Морковь",
+          "ja": "にんじん"
+        },
+        "description": {
+          "en": "Pulled from the patch by the pond."
+        },
+        "icon": {
+          "color": "#e08a3c"
+        },
+        "stack_limit": 99,
+        "props": {
+          "nutrition": 2
+        }
+      }
+    }
+  }
+}

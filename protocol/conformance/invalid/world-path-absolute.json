@@ -1,0 +1,51 @@
+{
+  "$vector": {
+    "kind": "world",
+    "expect": "invalid",
+    "errors": [
+      {
+        "code": "invalid_resource_path",
+        "path": "/entities/0/components/0/texture"
+      }
+    ],
+    "note": "Rejected by the section 5 character rules: absolute filesystem path."
+  },
+  "document": {
+    "protocol_version": "0.1.0",
+    "id": "w",
+    "display_name": {
+      "en": "W"
+    },
+    "bounds": {
+      "width": 64,
+      "height": 64
+    },
+    "spawns": {
+      "default": {
+        "at": [
+          0,
+          0
+        ]
+      }
+    },
+    "entities": [
+      {
+        "id": "e",
+        "at": [
+          0,
+          0
+        ],
+        "components": [
+          {
+            "type": "sprite",
+            "size": [
+              4,
+              4
+            ],
+            "texture": "/etc/passwd"
+          }
+        ]
+      }
+    ]
+  }
+}

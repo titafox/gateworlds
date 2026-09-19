@@ -1,0 +1,105 @@
+{
+  "$vector": {
+    "kind": "world",
+    "expect": "valid",
+    "note": "Every whitelisted component type, with optional fields omitted so defaults apply (z=0, offset=[0,0], target_spawn='default', count=1, once=true). A portal may name a world that does not exist locally: resolution happens at travel time, so a package stays valid on its own."
+  },
+  "document": {
+    "protocol_version": "0.1.0",
+    "id": "all_components",
+    "display_name": {
+      "en": "All"
+    },
+    "bounds": {
+      "width": 320,
+      "height": 320
+    },
+    "spawns": {
+      "default": {
+        "at": [
+          8,
+          8
+        ]
+      },
+      "side_door": {
+        "at": [
+          300,
+          300
+        ]
+      }
+    },
+    "entities": [
+      {
+        "id": "a",
+        "at": [
+          10,
+          10
+        ],
+        "components": [
+          {
+            "type": "sprite",
+            "size": [
+              8,
+              8
+            ],
+            "color": "#ff00aa"
+          },
+          {
+            "type": "solid",
+            "size": [
+              8,
+              8
+            ],
+            "offset": [
+              1,
+              1
+            ]
+          }
+        ]
+      },
+      {
+        "id": "b",
+        "at": [
+          40,
+          40
+        ],
+        "components": [
+          {
+            "type": "sprite",
+            "size": [
+              8,
+              8
+            ],
+            "color": "#00ff0080",
+            "z": -5
+          },
+          {
+            "type": "portal",
+            "size": [
+              8,
+              8
+            ],
+            "target_world": "somewhere_else"
+          }
+        ]
+      },
+      {
+        "id": "c",
+        "at": [
+          70,
+          70
+        ],
+        "components": [
+          {
+            "type": "pickup",
+            "size": [
+              8,
+              8
+            ],
+            "item": "all_components:thing"
+          }
+        ]
+      }
+    ]
+  }
+}

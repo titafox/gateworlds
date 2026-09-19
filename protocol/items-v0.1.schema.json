@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:openverse:schema:items:0.1.0",
+  "title": "OpenVerse item definitions v0.1.0",
+  "description": "Normative schema for items.json. Defs are duplicated from world-v0.1.schema.json on purpose: cross-file $ref resolution is a portability hazard for independent implementations, and this protocol is validated by two of them.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["protocol_version", "items"],
+  "properties": {
+    "protocol_version": { "$ref": "#/$defs/semver" },
+    "items": {
+      "type": "array",
+      "maxItems": 4096,
+      "items": { "$ref": "#/$defs/item" }
+    }
+  },
+  "$defs": {
+    "semver": { "type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$" },
+    "itemId": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 129,
+      "pattern": "^[a-z0-9]([a-z0-9_]*[a-z0-9])?:[a-z0-9]([a-z0-9_]*[a-z0-9])?$"
+    },
+    "localizedText": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 64,
+      "propertyNames": { "pattern": "^[A-Za-z]{2,3}(-[A-Za-z0-9]{2,8})*$" },
+      "additionalProperties": { "type": "string", "minLength": 1, "maxLength": 4096 }
+    },
+    "resourcePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 255,
+      "pattern": "^[A-Za-z0-9_][A-Za-z0-9_\\-./]*$"
+    },
+    "color": { "type": "string", "pattern": "^#([0-9a-f]{6}|[0-9a-f]{8})$" },
+    "props": {
+      "type": "object",
+      "description": "Opaque, creator-defined. No conforming implementation may read, validate or require any key inside it."
+    },
+    "item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "display_name", "icon"],
+      "properties": {
+        "id": { "$ref": "#/$defs/itemId" },
+        "display_name": { "$ref": "#/$defs/localizedText" },
+        "description": { "$ref": "#/$defs/localizedText" },
+        "icon": {
+          "type": "object",
+          "additionalProperties": false,
+          "oneOf": [
+            { "required": ["color"], "not": { "required": ["texture"] } },
+            { "required": ["texture"], "not": { "required": ["color"] } }
+          ],
+          "properties": {
+            "color": { "$ref": "#/$defs/color" },
+            "texture": { "$ref": "#/$defs/resourcePath" }
+          }
+        },
+        "stack_limit": { "type": "integer", "minimum": 1, "maximum": 9999, "default": 99 },
+        "props": { "$ref": "#/$defs/props" }
+      }
+    }
+  }
+}

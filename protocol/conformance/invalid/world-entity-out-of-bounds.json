@@ -1,0 +1,51 @@
+{
+  "$vector": {
+    "kind": "world",
+    "expect": "invalid",
+    "errors": [
+      {
+        "code": "value_out_of_range",
+        "path": "/entities/0/at"
+      }
+    ],
+    "note": "bounds is 64x64. value_out_of_range is more specific than schema_violation and wins."
+  },
+  "document": {
+    "protocol_version": "0.1.0",
+    "id": "w",
+    "display_name": {
+      "en": "W"
+    },
+    "bounds": {
+      "width": 64,
+      "height": 64
+    },
+    "spawns": {
+      "default": {
+        "at": [
+          0,
+          0
+        ]
+      }
+    },
+    "entities": [
+      {
+        "id": "e",
+        "at": [
+          9999,
+          9999
+        ],
+        "components": [
+          {
+            "type": "sprite",
+            "size": [
+              4,
+              4
+            ],
+            "color": "#ffffff"
+          }
+        ]
+      }
+    ]
+  }
+}

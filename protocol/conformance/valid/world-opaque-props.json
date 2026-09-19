@@ -1,0 +1,69 @@
+{
+  "$vector": {
+    "kind": "world",
+    "expect": "valid",
+    "note": "props is opaque. A validator must accept all of this untouched and must not read, interpret or reject any key inside it -- including keys that collide with protocol field names such as 'type' and 'script'. Round-tripping must preserve it byte-equivalently."
+  },
+  "document": {
+    "protocol_version": "0.1.0",
+    "id": "opaque_props",
+    "display_name": {
+      "en": "Props"
+    },
+    "bounds": {
+      "width": 64,
+      "height": 64
+    },
+    "spawns": {
+      "default": {
+        "at": [
+          0,
+          0
+        ]
+      }
+    },
+    "entities": [
+      {
+        "id": "e",
+        "at": [
+          1,
+          1
+        ],
+        "props": {
+          "type": "this key is named 'type' and is NOT a component discriminator",
+          "script": "this is a string in props, not an executable field",
+          "nested": {
+            "deep": [
+              1,
+              2,
+              {
+                "deeper": null
+              }
+            ]
+          },
+          "unicode": "灵气 · Дух · 霊気",
+          "number": -0.5,
+          "bool": false,
+          "null": null,
+          "empty_obj": {},
+          "empty_arr": []
+        },
+        "components": [
+          {
+            "type": "sprite",
+            "size": [
+              4,
+              4
+            ],
+            "color": "#ffffff"
+          }
+        ]
+      }
+    ],
+    "props": {
+      "world_level_bag": {
+        "anything": true
+      }
+    }
+  }
+}

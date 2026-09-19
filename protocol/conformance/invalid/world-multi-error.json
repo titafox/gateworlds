@@ -1,0 +1,77 @@
+{
+  "$vector": {
+    "kind": "world",
+    "expect": "invalid",
+    "errors": [
+      {
+        "code": "unknown_field",
+        "path": "/difficulty"
+      },
+      {
+        "code": "invalid_resource_path",
+        "path": "/entities/0/components/0/texture"
+      },
+      {
+        "code": "duplicate_id",
+        "path": "/entities/1/id"
+      },
+      {
+        "code": "unknown_component_type",
+        "path": "/entities/1/components/0/type"
+      }
+    ],
+    "exhaustive": true,
+    "note": "Four independent errors. A validator must report all of them in one pass -- a creator fixing one error per round trip through review is a bad experience, and a bad experience means fewer worlds. 'exhaustive' means no errors beyond those listed may be reported."
+  },
+  "document": {
+    "protocol_version": "0.1.0",
+    "id": "w",
+    "display_name": {
+      "en": "W"
+    },
+    "bounds": {
+      "width": 64,
+      "height": 64
+    },
+    "spawns": {
+      "default": {
+        "at": [
+          0,
+          0
+        ]
+      }
+    },
+    "entities": [
+      {
+        "id": "dup",
+        "at": [
+          0,
+          0
+        ],
+        "components": [
+          {
+            "type": "sprite",
+            "size": [
+              4,
+              4
+            ],
+            "texture": "../escape.png"
+          }
+        ]
+      },
+      {
+        "id": "dup",
+        "at": [
+          8,
+          8
+        ],
+        "components": [
+          {
+            "type": "summon_dragon"
+          }
+        ]
+      }
+    ],
+    "difficulty": "hard"
+  }
+}

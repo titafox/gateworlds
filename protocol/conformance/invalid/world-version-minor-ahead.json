@@ -1,0 +1,33 @@
+{
+  "$vector": {
+    "kind": "world",
+    "expect": "invalid",
+    "errors": [
+      {
+        "code": "unsupported_protocol_version",
+        "path": "/protocol_version"
+      }
+    ],
+    "note": "Pre-1.0, a minor bump is breaking. A 0.1 validator must reject 0.2 rather than guess at content it does not understand."
+  },
+  "document": {
+    "protocol_version": "0.2.0",
+    "id": "w",
+    "display_name": {
+      "en": "W"
+    },
+    "bounds": {
+      "width": 64,
+      "height": 64
+    },
+    "spawns": {
+      "default": {
+        "at": [
+          0,
+          0
+        ]
+      }
+    },
+    "entities": []
+  }
+}

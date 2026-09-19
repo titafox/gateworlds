@@ -1,0 +1,33 @@
+{
+  "$vector": {
+    "kind": "items",
+    "expect": "valid",
+    "note": "Item props carry world-specific meaning (spirit_qi). No other world is required to understand it, and no implementation may require it."
+  },
+  "document": {
+    "protocol_version": "0.1.0",
+    "items": [
+      {
+        "id": "xianxia_gate:spirit_herb",
+        "display_name": {
+          "zh-CN": "灵草",
+          "en": "Spirit Herb",
+          "ru": "Духовная трава",
+          "ja": "霊草"
+        },
+        "description": {
+          "zh-CN": "一株微微发亮的草。村庄不认识它，但它不会因此消失。",
+          "en": "A faintly glowing herb. The village does not know what it is. It does not disappear for that reason."
+        },
+        "icon": {
+          "color": "#7fe08a"
+        },
+        "stack_limit": 99,
+        "props": {
+          "spirit_qi": 3,
+          "grade": "low"
+        }
+      }
+    ]
+  }
+}

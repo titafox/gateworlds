@@ -1,0 +1,52 @@
+{
+  "$vector": {
+    "kind": "world",
+    "expect": "invalid",
+    "errors": [
+      {
+        "code": "schema_violation",
+        "path": "/entities/0/components/0"
+      }
+    ],
+    "note": "Exactly one of color/texture."
+  },
+  "document": {
+    "protocol_version": "0.1.0",
+    "id": "w",
+    "display_name": {
+      "en": "W"
+    },
+    "bounds": {
+      "width": 64,
+      "height": 64
+    },
+    "spawns": {
+      "default": {
+        "at": [
+          0,
+          0
+        ]
+      }
+    },
+    "entities": [
+      {
+        "id": "e",
+        "at": [
+          0,
+          0
+        ],
+        "components": [
+          {
+            "type": "sprite",
+            "size": [
+              4,
+              4
+            ],
+            "color": "#ffffff",
+            "texture": "art/e.png"
+          }
+        ]
+      }
+    ]
+  }
+}

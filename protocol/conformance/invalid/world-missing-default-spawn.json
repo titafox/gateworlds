@@ -1,0 +1,33 @@
+{
+  "$vector": {
+    "kind": "world",
+    "expect": "invalid",
+    "errors": [
+      {
+        "code": "schema_violation",
+        "path": "/spawns"
+      }
+    ],
+    "note": "Every world must define a spawn named 'default', or arriving from an unknown route has nowhere to land."
+  },
+  "document": {
+    "protocol_version": "0.1.0",
+    "id": "w",
+    "display_name": {
+      "en": "W"
+    },
+    "bounds": {
+      "width": 64,
+      "height": 64
+    },
+    "spawns": {
+      "side_door": {
+        "at": [
+          0,
+          0
+        ]
+      }
+    },
+    "entities": []
+  }
+}

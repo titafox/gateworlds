@@ -1,0 +1,85 @@
+{
+  "$vector": {
+    "kind": "save",
+    "expect": "valid",
+    "note": "THE acceptance scenario: player is standing in pastoral_village while holding an item defined by xianxia_gate. item_defs embeds the definition so the save stays readable even if xianxia_gate is unpublished. consumed_pickups stops the herb respawning."
+  },
+  "document": {
+    "save_version": "0.1.0",
+    "created_at": "2026-09-19T03:00:00Z",
+    "updated_at": "2026-09-19T03:12:41Z",
+    "player": {
+      "current_world": "pastoral_village",
+      "at": [
+        508,
+        228
+      ]
+    },
+    "inventory": {
+      "stacks": [
+        {
+          "item": "xianxia_gate:spirit_herb",
+          "count": 1
+        },
+        {
+          "item": "pastoral_village:carrot",
+          "count": 3
+        }
+      ]
+    },
+    "item_defs": {
+      "xianxia_gate:spirit_herb": {
+        "id": "xianxia_gate:spirit_herb",
+        "display_name": {
+          "zh-CN": "灵草",
+          "en": "Spirit Herb",
+          "ru": "Духовная трава",
+          "ja": "霊草"
+        },
+        "description": {
+          "zh-CN": "一株微微发亮的草。村庄不认识它，但它不会因此消失。",
+          "en": "A faintly glowing herb. The village does not know what it is. It does not disappear for that reason."
+        },
+        "icon": {
+          "color": "#7fe08a"
+        },
+        "stack_limit": 99,
+        "props": {
+          "spirit_qi": 3,
+          "grade": "low"
+        }
+      },
+      "pastoral_village:carrot": {
+        "id": "pastoral_village:carrot",
+        "display_name": {
+          "zh-CN": "胡萝卜",
+          "en": "Carrot",
+          "ru": "Морковь",
+          "ja": "にんじん"
+        },
+        "description": {
+          "en": "Pulled from the patch by the pond."
+        },
+        "icon": {
+          "color": "#e08a3c"
+        },
+        "stack_limit": 99,
+        "props": {
+          "nutrition": 2
+        }
+      }
+    },
+    "world_state": {
+      "xianxia_gate": {
+        "consumed_pickups": [
+          "herb_1"
+        ]
+      },
+      "pastoral_village": {
+        "consumed_pickups": [
+          "carrot_1"
+        ]
+      }
+    }
+  }
+}

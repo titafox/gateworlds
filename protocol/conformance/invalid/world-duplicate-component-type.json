@@ -1,0 +1,59 @@
+{
+  "$vector": {
+    "kind": "world",
+    "expect": "invalid",
+    "errors": [
+      {
+        "code": "duplicate_id",
+        "path": "/entities/0/components/1/type"
+      }
+    ],
+    "note": "An entity must not carry two components of the same type; draw order would be undefined."
+  },
+  "document": {
+    "protocol_version": "0.1.0",
+    "id": "w",
+    "display_name": {
+      "en": "W"
+    },
+    "bounds": {
+      "width": 64,
+      "height": 64
+    },
+    "spawns": {
+      "default": {
+        "at": [
+          0,
+          0
+        ]
+      }
+    },
+    "entities": [
+      {
+        "id": "e",
+        "at": [
+          0,
+          0
+        ],
+        "components": [
+          {
+            "type": "sprite",
+            "size": [
+              4,
+              4
+            ],
+            "color": "#111111"
+          },
+          {
+            "type": "sprite",
+            "size": [
+              8,
+              8
+            ],
+            "color": "#222222"
+          }
+        ]
+      }
+    ]
+  }
+}

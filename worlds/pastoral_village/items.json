@@ -1,0 +1,24 @@
+{
+  "protocol_version": "0.1.0",
+  "items": [
+    {
+      "id": "pastoral_village:carrot",
+      "display_name": {
+        "zh-CN": "胡萝卜",
+        "en": "Carrot",
+        "ru": "Морковь",
+        "ja": "にんじん"
+      },
+      "description": {
+        "en": "Pulled from the patch by the pond."
+      },
+      "icon": {
+        "color": "#e08a3c"
+      },
+      "stack_limit": 99,
+      "props": {
+        "nutrition": 2
+      }
+    }
+  ]
+}

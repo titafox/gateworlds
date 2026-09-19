@@ -1,0 +1,247 @@
+{
+  "protocol_version": "0.1.0",
+  "id": "xianxia_gate",
+  "display_name": {
+    "zh-CN": "青霄山门",
+    "en": "Azure Sky Gate",
+    "ru": "Врата Лазурных Небес",
+    "ja": "青霄山門"
+  },
+  "description": {
+    "en": "A small mountain sect. The air tastes of cold stone.",
+    "zh-CN": "一座小小的山门。空气里是冷石头的味道。"
+  },
+  "license": {
+    "code": "0BSD",
+    "assets": "CC0-1.0"
+  },
+  "bounds": {
+    "width": 640,
+    "height": 480
+  },
+  "background": "#1b2430",
+  "spawns": {
+    "default": {
+      "at": [
+        96,
+        96
+      ]
+    },
+    "from_village": {
+      "at": [
+        110,
+        228
+      ]
+    }
+  },
+  "entities": [
+    {
+      "id": "wall_n",
+      "at": [
+        0,
+        0
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            640,
+            16
+          ],
+          "color": "#3b2f24",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            640,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wall_s",
+      "at": [
+        0,
+        464
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            640,
+            16
+          ],
+          "color": "#3b2f24",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            640,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wall_w",
+      "at": [
+        0,
+        0
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            16,
+            480
+          ],
+          "color": "#3b2f24",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            16,
+            480
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wall_e",
+      "at": [
+        624,
+        0
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            16,
+            480
+          ],
+          "color": "#3b2f24",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            16,
+            480
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pillar_left",
+      "at": [
+        280,
+        60
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            32,
+            140
+          ],
+          "color": "#8a8f98"
+        },
+        {
+          "type": "solid",
+          "size": [
+            32,
+            140
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pillar_right",
+      "at": [
+        360,
+        60
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            32,
+            140
+          ],
+          "color": "#8a8f98"
+        },
+        {
+          "type": "solid",
+          "size": [
+            32,
+            140
+          ]
+        }
+      ]
+    },
+    {
+      "id": "herb_1",
+      "at": [
+        420,
+        300
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            16,
+            16
+          ],
+          "color": "#7fe08a",
+          "z": 1
+        },
+        {
+          "type": "pickup",
+          "size": [
+            20,
+            20
+          ],
+          "offset": [
+            -2,
+            -2
+          ],
+          "item": "xianxia_gate:spirit_herb",
+          "count": 1,
+          "once": true
+        }
+      ]
+    },
+    {
+      "id": "gate_to_village",
+      "at": [
+        32,
+        216
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            48,
+            48
+          ],
+          "color": "#9b7fe0",
+          "z": 1
+        },
+        {
+          "type": "portal",
+          "size": [
+            48,
+            48
+          ],
+          "target_world": "pastoral_village",
+          "target_spawn": "from_xianxia"
+        }
+      ]
+    }
+  ],
+  "props": {}
+}
