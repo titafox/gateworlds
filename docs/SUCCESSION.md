@@ -59,9 +59,10 @@ goes in `docs/adr/` with its rejected alternatives.
 
 ### 2.4 No single point of storage — **open gap**
 
-> **Current risk, highest severity:** at the time of writing, this repository exists on one
-> laptop. That is a worse single point of failure than any governance problem in this
-> document, and it is fixable in ten minutes.
+> **Status 2026-09-19:** published to https://github.com/titafox/gateworlds (public).
+> The laptop is no longer the only copy. **One host is still not two** — a mirror on an
+> unaffiliated forge remains outstanding, and the repository sits under a personal account
+> rather than an organisation, so access does not yet survive one account going away.
 
 Requirements:
 
@@ -148,7 +149,9 @@ of this project's own constitution that says otherwise is the wrong reading.
 
 Ordered by how much risk each one removes today.
 
-- [ ] **Push to two independently operated public hosts** (§2.4) — highest severity open item
+- [x] Off the single laptop — published at `titafox/gateworlds` (§2.4)
+- [ ] **A second, unaffiliated public host** (§2.4) — highest severity open item
+- [ ] **Move to an organisation** so ownership is not one personal account (§2.4, §3.1)
 - [ ] **Verify the bootstrap instructions on a clean checkout** (§2.5)
 - [ ] `docs/INFRASTRUCTURE.md` inventory, no secrets (§2.6)
 - [x] Licences that need no permission to continue under (§2.1)
