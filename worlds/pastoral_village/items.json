@@ -10,7 +10,10 @@
         "ja": "にんじん"
       },
       "description": {
-        "en": "Pulled from the patch by the pond."
+        "zh-CN": "从池塘边的菜畦里拔出来的。泥还没抖干净。",
+        "en": "Pulled from the patch by the pond. The soil is still on it.",
+        "ru": "Выдернута с грядки у пруда. Земля ещё на ней.",
+        "ja": "池のそばの畑から抜いたもの。まだ土がついている。"
       },
       "icon": {
         "color": "#e08a3c"

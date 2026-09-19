@@ -11,7 +11,9 @@
       },
       "description": {
         "zh-CN": "一株微微发亮的草。村庄不认识它，但它不会因此消失。",
-        "en": "A faintly glowing herb. The village does not know what it is. It does not disappear for that reason."
+        "en": "A faintly glowing herb. The village does not know what it is. It does not disappear for that reason.",
+        "ru": "Слабо светящаяся трава. Деревня не знает, что это. Она не исчезает по этой причине.",
+        "ja": "かすかに光る草。村はこれが何か知らない。だからといって消えたりはしない。"
       },
       "icon": {
         "color": "#7fe08a"
