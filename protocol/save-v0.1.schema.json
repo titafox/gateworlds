@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:openverse:schema:save:0.1.0",
-  "title": "OpenVerse save file v0.1.0",
+  "$id": "urn:gateworlds:schema:save:0.1.0",
+  "title": "Gateworlds save file v0.1.0",
   "description": "Normative schema for a save. A save is self-contained: item_defs embeds a snapshot of every held item's definition so that a save survives its defining world package being unpublished, renamed or deleted. See SPEC.md section 8.3.",
   "type": "object",
   "additionalProperties": false,

@@ -1,4 +1,4 @@
-# OpenVerse World Protocol
+# Gateworlds — World Protocol
 
 **Version:** `0.1.0`
 **Status:** Draft. Pre-1.0 — minor versions may break compatibility (see §2).

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "urn:openverse:schema:world:0.1.0",
-  "title": "OpenVerse world package manifest v0.1.0",
+  "$id": "urn:gateworlds:schema:world:0.1.0",
+  "title": "Gateworlds world package manifest v0.1.0",
   "description": "Normative schema for world.json. See SPEC.md. Regex patterns here deliberately avoid lookahead/lookbehind so that engines without them (e.g. the Rust `regex` crate) can implement this schema directly. Rules that cannot be expressed without lookahead -- resource path containment, duplicate ids, reference resolution, item namespacing -- are procedural checks listed in SPEC.md section 11.",
   "type": "object",
   "additionalProperties": false,

@@ -1,4 +1,4 @@
-# OpenVerse 🌌
+# Gateworlds 🌌
 
 **English** · [简体中文](README.zh-CN.md) · [Русский](README.ru.md) · [日本語](README.ja.md)
 
@@ -12,9 +12,9 @@
 
 ---
 
-## 🌍 What is OpenVerse?
+## 🌍 What is Gateworlds?
 
-OpenVerse is an open-source game and community experiment being built from scratch.
+Gateworlds is an open-source game and community experiment being built from scratch.
 
 Our goal is not to ship a game with fixed content. It is to create an open-world universe that the community builds together and keeps expanding.
 
@@ -55,7 +55,7 @@ The community is what makes creations last.
 
 ### 2. No mandated genre or worldview
 
-OpenVerse will not confine every world to a single kind of gameplay.
+Gateworlds will not confine every world to a single kind of gameplay.
 
 One world may have levels, combat, and magic.
 
@@ -110,10 +110,10 @@ We will not require every future creator to obey a technology forever, merely be
 
 ## 🪐 One universe, countless worlds
 
-OpenVerse aims to build an extensible system of worlds.
+Gateworlds aims to build an extensible system of worlds.
 
 ```text
-                  OpenVerse
+                  Gateworlds
                       |
              Shared Universe Services
                       |
@@ -167,9 +167,9 @@ In the first phase we will build several small worlds for real, and let the inte
 
 ---
 
-## 📜 The OpenVerse Constitution
+## 📜 The Gateworlds Constitution
 
-OpenVerse intends to build an open, transparent, and amendable system of community governance over time.
+Gateworlds intends to build an open, transparent, and amendable system of community governance over time.
 
 The initial draft constitution will address the following principles:
 
@@ -215,7 +215,7 @@ The constitution is still a draft, and the voting mechanism has not been decided
 
 **Status: Pre-Alpha / project bootstrap**
 
-OpenVerse is being developed from zero. We are building a minimal runnable prototype.
+Gateworlds is being developed from zero. We are building a minimal runnable prototype.
 
 Please note:
 
@@ -232,7 +232,7 @@ We will publish actual development progress, known issues, and interim results a
 
 ## 🎮 The first playable version
 
-### OpenVerse 0.0.1
+### Gateworlds 0.0.1
 
 Our first development goal is:
 
@@ -383,7 +383,7 @@ For higher-risk changes, we will prioritise protecting the runtime environment a
 
 ## 💡 On commercialisation
 
-OpenVerse wants to find a model that can sustain open-source development and community operations over the long term.
+Gateworlds wants to find a model that can sustain open-source development and community operations over the long term.
 
 That may eventually include official servers, sponsorship, hosting services, and AI creation services.
 
@@ -397,7 +397,7 @@ Commercial operation must not be used to quietly strip away open-source rights a
 
 ## ⚖️ License
 
-OpenVerse aims to maximise freedom to create, modify, distribute, and commercialise.
+Gateworlds aims to maximise freedom to create, modify, distribute, and commercialise.
 
 The project uses the following licensing scheme:
 
@@ -407,11 +407,11 @@ The project uses the following licensing scheme:
 
 Third-party dependencies and assets remain under their own licences and are not automatically covered by the above. Contributors must ensure they have the right to submit content under the corresponding licence.
 
-Anyone may use, modify, distribute, commercialise, or fork OpenVerse within the terms of the applicable licences.
+Anyone may use, modify, distribute, commercialise, or fork Gateworlds within the terms of the applicable licences.
 
 We encourage voluntary attribution, giving back to the community, and publishing improvements, but none of these are additional legal conditions of the licences above.
 
-OpenVerse governance may change the licensing arrangements of future versions, but it may not use that to revoke rights already validly granted in existing versions.
+Gateworlds governance may change the licensing arrangements of future versions, but it may not use that to revoke rights already validly granted in existing versions.
 
 **Creation belongs to everyone.**
 
@@ -421,7 +421,7 @@ See [`LICENSE`](LICENSE) (0BSD) and [`LICENSE-CC0`](LICENSE-CC0) (CC0 1.0 Univer
 
 ## 🌱 Starting from zero
 
-OpenVerse is still only a project that has just begun.
+Gateworlds is still only a project that has just begun.
 
 We have no vast universe already built, and we do not claim AI will automatically solve every development problem.
 

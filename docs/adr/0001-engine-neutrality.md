@@ -8,7 +8,7 @@
 
 ## Context
 
-OpenVerse's README states that the game engine, the SDK, and the world protocol are not
+Gateworlds's README states that the game engine, the SDK, and the world protocol are not
 permanent, and that the project will not require future creators to obey a technology
 merely because it happened to be used first.
 
