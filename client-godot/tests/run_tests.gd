@@ -14,7 +14,7 @@ const TestWorld := preload("res://tests/test_world.gd")
 
 const VECTOR_DIR := "res://protocol/conformance"
 ## Ratchet. Raise it when tests are added; never lower it to make a run pass.
-const MIN_CHECKS := 180
+const MIN_CHECKS := 200
 
 
 func _initialize() -> void:

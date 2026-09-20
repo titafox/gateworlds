@@ -1,0 +1,22 @@
+{
+  "protocol_version": "0.1.0",
+  "items": [
+    {
+      "id": "my_world:pebble",
+      "display_name": {
+        "en": "Pebble",
+        "zh-CN": "石子"
+      },
+      "description": {
+        "en": "Smooth, and warmer than it should be."
+      },
+      "icon": {
+        "color": "#c9c2b4"
+      },
+      "stack_limit": 99,
+      "props": {
+        "weight_grams": 40
+      }
+    }
+  ]
+}

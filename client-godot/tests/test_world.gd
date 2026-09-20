@@ -19,6 +19,7 @@ static func run(t, tree: SceneTree) -> void:
 	_reference_worlds_link(t)
 	_localisation(t)
 	_travel(t, tree)
+	the_example_world_loads(t)
 
 
 static func _geometry(t) -> void:
@@ -209,3 +210,25 @@ static func _travel(t, tree: SceneTree) -> void:
 	t.ok(not main._portals_armed, "portals are disarmed on arrival")
 
 	main.free()
+
+
+## The world the contribution guide hands a newcomer must be accepted by the client that
+## will load it, not only by the validator that gates it.
+##
+## The two implementations agree on all 27 conformance vectors, so this is close to
+## redundant -- but "close to redundant" is where the first contributor's hour gets wasted,
+## and the cost of being sure is four lines.
+static func the_example_world_loads(t) -> void:
+	t.group("example world")
+	var registry = WorldRegistry.new()
+	registry.add_source(LocalWorldSource.new("res://examples"))
+	var accepted: Array = registry.load_all()
+	t.eq(registry.rejected().size(), 0, "the example in CONTRIBUTING.md validates in the client")
+	t.ok(accepted.has("my_world"), "and is offered under the id it declares, found %s" % str(accepted))
+
+	var rt = WorldLoader.build(registry.world("my_world"))
+	t.eq(rt.portals.size(), 1, "its way out is built")
+	t.eq(rt.pickups.size(), 1, "and the thing to pick up")
+	t.eq(rt.portals[0].target_world, "pastoral_village",
+		"its portal points at a world that ships with the project")
+	rt.root.free()

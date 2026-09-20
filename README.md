@@ -205,7 +205,7 @@ The project needs to establish clear membership, decision procedures, transfer o
 
 Governance documents are maintained separately:
 
-`CONSTITUTION.md`
+[`CONSTITUTION.md`](CONSTITUTION.md)
 
 The constitution is still a draft, and the voting mechanism has not been decided.
 
@@ -234,7 +234,9 @@ We will publish actual development progress, known issues, and interim results a
 
 ### Gateworlds 0.0.1
 
-Our first development goal is:
+**This works now.** `godot --path client-godot` — walk east from the village into the portal, pick up the herb, walk back. `I` opens your inventory, `F5` saves, `F9` loads. See [`docs/BOOTSTRAP.md`](docs/BOOTSTRAP.md).
+
+Our first development goal was:
 
 **One village, one cultivation world, one portal.**
 
@@ -263,28 +265,28 @@ The initial prototype will likely be 2D and single-player, to keep complexity lo
 
 ### Phase 0: Bootstrap
 
-* [ ] Set up a public repository
-* [ ] Write the project README
-* [ ] Draft the initial constitution
-* [ ] Decide the code and asset licences
-* [ ] Write contribution guidelines and code review rules
-* [ ] Set up the base game project
+* [x] Set up a public repository
+* [x] Write the project README
+* [x] Draft the initial constitution
+* [x] Decide the code and asset licences
+* [x] Write contribution guidelines and code review rules
+* [x] Set up the base game project
 
 ### Phase 1: Minimal open universe
 
-* [ ] Create the starting village
-* [ ] Implement player movement and interaction
-* [ ] Create the cultivation world
-* [ ] Implement cross-world travel
-* [ ] Implement basic items and saves
-* [ ] Write basic tests
+* [x] Create the starting village
+* [x] Implement player movement and interaction
+* [x] Create the cultivation world
+* [x] Implement cross-world travel
+* [x] Implement basic items and saves
+* [x] Write basic tests
 
 ### Phase 2: Community world expansion
 
-* [ ] Extract the world integration interface
+* [x] Extract the world integration interface
 * [ ] Build the first World SDK
-* [ ] Provide world development examples
-* [ ] Set up automated code review
+* [x] Provide world development examples
+* [x] Set up automated code review
 * [ ] Accept the first community world
 * [ ] Validate that the SDK actually extends
 
@@ -345,7 +347,7 @@ Propose improvements to the SDK, protocols, servers, and development tools.
 
 Discuss the project's rules, submit constitutional amendments, and participate in community governance once it is established.
 
-Until formal contribution guidelines are published, please raise ideas through GitHub Issues.
+Start with [`CONTRIBUTING.md`](CONTRIBUTING.md). It is short, and it includes a complete world you can copy.
 
 Code contributions should be submitted as pull requests and go through review.
 
@@ -353,9 +355,7 @@ Please do not submit unlicensed third-party code, game assets, or personal data 
 
 Large volumes of unfiltered AI-generated content should not go straight into the main branch.
 
-Future contribution rules will be documented in:
-
-`CONTRIBUTING.md`
+The rules are in [`CONTRIBUTING.md`](CONTRIBUTING.md), and the rules about the rules are in [`CONSTITUTION.md`](CONSTITUTION.md).
 
 ---
 

@@ -1,0 +1,193 @@
+{
+  "protocol_version": "0.1.0",
+  "id": "my_world",
+  "display_name": {
+    "en": "My World",
+    "zh-CN": "我的世界"
+  },
+  "description": {
+    "en": "One room, one thing to pick up, one way out."
+  },
+  "license": {
+    "code": "0BSD",
+    "assets": "CC0-1.0"
+  },
+  "bounds": {
+    "width": 320,
+    "height": 240
+  },
+  "background": "#202a35",
+  "spawns": {
+    "default": {
+      "at": [
+        40,
+        112
+      ]
+    },
+    "from_village": {
+      "at": [
+        64,
+        112
+      ]
+    }
+  },
+  "entities": [
+    {
+      "id": "wall_north",
+      "at": [
+        0,
+        0
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            320,
+            16
+          ],
+          "color": "#3b2f24",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            320,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wall_south",
+      "at": [
+        0,
+        224
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            320,
+            16
+          ],
+          "color": "#3b2f24",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            320,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wall_west",
+      "at": [
+        0,
+        0
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            16,
+            240
+          ],
+          "color": "#3b2f24",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            16,
+            240
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wall_east",
+      "at": [
+        304,
+        0
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            16,
+            240
+          ],
+          "color": "#3b2f24",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            16,
+            240
+          ]
+        }
+      ]
+    },
+    {
+      "id": "pebble",
+      "at": [
+        180,
+        120
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            12,
+            12
+          ],
+          "color": "#c9c2b4",
+          "z": 1
+        },
+        {
+          "type": "pickup",
+          "size": [
+            16,
+            16
+          ],
+          "offset": [
+            -2,
+            -2
+          ],
+          "item": "my_world:pebble"
+        }
+      ]
+    },
+    {
+      "id": "way_out",
+      "at": [
+        256,
+        96
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            40,
+            48
+          ],
+          "color": "#9b7fe0",
+          "z": 1
+        },
+        {
+          "type": "portal",
+          "size": [
+            40,
+            48
+          ],
+          "target_world": "pastoral_village",
+          "target_spawn": "default"
+        }
+      ]
+    }
+  ]
+}

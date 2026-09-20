@@ -159,3 +159,80 @@ fn validating_a_world_file_alone_resolves_its_sibling_items() {
         report.findings
     );
 }
+
+/// A repository convention, not a protocol rule.
+///
+/// The protocol says nothing about directories: a package could be a zip, an HTTP response,
+/// or anything else. But inside *this* repository a world lives in a directory, and if the
+/// directory is called one thing while the world calls itself another, the registry
+/// publishes under an id that does not appear anywhere in the tree. A contributor renaming
+/// their folder and not the `id` -- or the reverse -- is an easy mistake and an annoying one
+/// to trace, so it is caught here rather than left to a reviewer's eye.
+#[test]
+fn every_world_directory_is_named_after_the_world_it_holds() {
+    let worlds = repo_root().join("worlds");
+    let mut dirs: Vec<PathBuf> = std::fs::read_dir(&worlds)
+        .expect("worlds/ should exist")
+        .flatten()
+        .map(|e| e.path())
+        .filter(|p| p.is_dir())
+        .collect();
+    dirs.sort();
+
+    let mut problems = String::new();
+    for dir in &dirs {
+        let folder = dir.file_name().unwrap_or_default().to_string_lossy();
+        let world: serde_json::Value = serde_json::from_str(
+            &std::fs::read_to_string(dir.join("world.json")).expect("readable"),
+        )
+        .expect("json");
+        let id = world["id"].as_str().unwrap_or_default();
+        if id != folder {
+            problems.push_str(&format!("  worlds/{folder}/ declares id {id:?}\n"));
+        }
+    }
+    assert!(
+        problems.is_empty(),
+        "directory and world id disagree:\n{problems}"
+    );
+}
+
+/// A contributor's world must not quietly take over an id another world already uses.
+///
+/// Item ids are namespaced by their defining world (SPEC §3.2), so two worlds sharing an id
+/// would also share an item namespace, and a save could no longer say which one it meant.
+#[test]
+fn no_two_shipped_worlds_claim_the_same_id() {
+    let worlds = repo_root().join("worlds");
+    let mut seen: std::collections::BTreeMap<String, String> = std::collections::BTreeMap::new();
+    let mut problems = String::new();
+
+    let mut dirs: Vec<PathBuf> = std::fs::read_dir(&worlds)
+        .expect("worlds/ should exist")
+        .flatten()
+        .map(|e| e.path())
+        .filter(|p| p.is_dir())
+        .collect();
+    dirs.sort();
+
+    for dir in &dirs {
+        let folder = dir
+            .file_name()
+            .unwrap_or_default()
+            .to_string_lossy()
+            .to_string();
+        let world: serde_json::Value = serde_json::from_str(
+            &std::fs::read_to_string(dir.join("world.json")).expect("readable"),
+        )
+        .expect("json");
+        let id = world["id"].as_str().unwrap_or_default().to_string();
+        if let Some(first) = seen.get(&id) {
+            problems.push_str(&format!(
+                "  {id:?} is claimed by both {first} and {folder}\n"
+            ));
+        } else {
+            seen.insert(id, folder);
+        }
+    }
+    assert!(problems.is_empty(), "duplicate world ids:\n{problems}");
+}
