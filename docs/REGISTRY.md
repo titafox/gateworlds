@@ -6,7 +6,7 @@ The registry is **static files**. There is no application server: `gateworlds-va
 publish` validates every package and writes a directory, and any web server hands it out.
 Nothing is listening, nothing can crash, and nothing executes on request.
 
-Reference deployment: `http://185.138.186.150/v0/` — see
+Reference deployment: `https://gw.koko.kg/v0/` — see
 [`INFRASTRUCTURE.md`](INFRASTRUCTURE.md). It is a reference, not an authority; the layout
 below is what matters, and anyone may host their own.
 
