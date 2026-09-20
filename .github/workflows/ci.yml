@@ -48,3 +48,26 @@ jobs:
           cargo build --release --manifest-path server/Cargo.toml
           ./server/target/release/gateworlds-validate conformance protocol/conformance
           ./server/target/release/gateworlds-validate package worlds/*
+
+  client:
+    name: client conformance (Godot)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Godot
+        env:
+          GODOT_VERSION: 4.7.2-stable
+        run: |
+          curl -sSLo godot.zip \
+            "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}/Godot_v${GODOT_VERSION}_linux.x86_64.zip"
+          unzip -q godot.zip
+          mv Godot_v${GODOT_VERSION}_linux.x86_64 /usr/local/bin/godot
+          chmod +x /usr/local/bin/godot
+          godot --version
+
+      # Runs the same 27 vectors the Rust validator runs. ADR-0001 §4: two independent
+      # implementations agreeing is the evidence engine neutrality rests on, so this is not
+      # a duplicate of the `protocol` job -- it is the other half of the proof.
+      - name: Unit tests and conformance vectors
+        run: godot --headless --path client-godot --script res://tests/run_tests.gd

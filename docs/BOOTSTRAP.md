@@ -11,7 +11,7 @@ merely written. The verification note at the bottom records the last time that h
 | Tool | Version | For |
 |---|---|---|
 | Rust | 1.85+ (edition 2024) | the protocol validator and the server |
-| Godot | 4.x | the client — **not yet written**, nothing to run |
+| Godot | 4.7.2 | the client's protocol layer and its headless tests |
 
 Rust, if absent:
 
@@ -67,11 +67,25 @@ mkdir -p worlds/my_world
 `worlds/pastoral_village/` is the smallest complete example. The validator reports **every**
 problem it can find in one pass, so you are not fixing one error per round trip.
 
+## The client's tests
+
+```sh
+godot --headless --path client-godot --script res://tests/run_tests.gd
+```
+
+Runs the GDScript unit tests and **the same 27 conformance vectors the Rust validator
+runs**. Exits non-zero on failure.
+
+`client-godot/protocol` is a symlink to `../protocol`, not a copy: the client compiles the
+schemas from the one normative source, exactly as the Rust crate does with `include_str!`.
+Two copies of a schema are two schemas.
+
 ## What is not here yet
 
-- **The Godot client.** Nothing to run, nothing to look at. The conformance vectors define
-  what it will have to do before it exists.
-- **The registry server.** `server/` currently holds the protocol library and the CLI only.
+- **The playable client.** The protocol layer is done and tested; world loading, the player,
+  portals, inventory and saves are not written.
+- **The registry service.** There is none by design — the registry is static files, see
+  [REGISTRY.md](REGISTRY.md).
 
 Both are deliberate: [ADR-0001](adr/0001-engine-neutrality.md) puts the protocol first so
 that the client and the server are replaceable rather than foundational.
