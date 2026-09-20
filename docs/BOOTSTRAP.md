@@ -76,6 +76,24 @@ godot --headless --path client-godot --script res://tests/run_tests.gd
 Runs the GDScript unit tests and **the same 27 conformance vectors the Rust validator
 runs**. Exits non-zero on failure.
 
+### Playing it
+
+```sh
+godot --path client-godot
+```
+
+Arrow keys or WASD. Walk east from the village into the portal.
+
+There is also a scripted walkthrough that drives the real game, lets the real portal
+triggers fire, and saves screenshots:
+
+```sh
+GW_SHOTS=/tmp/shots godot --path client-godot --script res://tests/walkthrough.gd
+```
+
+It needs a display, so it is not part of CI. It exists because "you can walk between the
+two worlds" is not something a headless assertion can honestly claim.
+
 `client-godot/protocol` is a symlink to `../protocol`, not a copy: the client compiles the
 schemas from the one normative source, exactly as the Rust crate does with `include_str!`.
 Two copies of a schema are two schemas.

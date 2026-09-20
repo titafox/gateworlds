@@ -18,3 +18,22 @@ window/stretch/aspect="keep"
 [rendering]
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+
+[input]
+
+move_left={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"keycode":4194319,"pressed":true),Object(InputEventKey,"keycode":65,"pressed":true)]
+}
+move_right={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"keycode":4194321,"pressed":true),Object(InputEventKey,"keycode":68,"pressed":true)]
+}
+move_up={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"keycode":4194320,"pressed":true),Object(InputEventKey,"keycode":87,"pressed":true)]
+}
+move_down={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"keycode":4194322,"pressed":true),Object(InputEventKey,"keycode":83,"pressed":true)]
+}

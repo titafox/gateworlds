@@ -8,8 +8,11 @@ extends SceneTree
 const Conformance := preload("res://core/protocol/conformance.gd")
 const Harness := preload("res://tests/harness.gd")
 const TestProtocol := preload("res://tests/test_protocol.gd")
+const TestWorld := preload("res://tests/test_world.gd")
 
 const VECTOR_DIR := "res://protocol/conformance"
+## Ratchet. Raise it when tests are added; never lower it to make a run pass.
+const MIN_CHECKS := 100
 
 
 func _initialize() -> void:
@@ -18,10 +21,19 @@ func _initialize() -> void:
 	print("== unit tests ==")
 	var t := Harness.new()
 	TestProtocol.run(t)
+	TestWorld.run(t, self)
 	for f in t.failures:
 		print("  FAIL  %s" % f)
 	print("  %d checks, %d failed" % [t.checks, t.failures.size()])
 	failed = failed or not t.failures.is_empty()
+
+	# A GDScript runtime error aborts the function it happens in, so the checks after it
+	# never run -- and a harness that only counts failures would report zero. Fewer checks
+	# than last time is itself a failure.
+	if t.checks < MIN_CHECKS:
+		print("  FAIL  expected at least %d checks, ran %d -- did a test abort early?"
+			% [MIN_CHECKS, t.checks])
+		failed = true
 
 	print("\n== conformance vectors ==")
 	var outcomes := Conformance.run_dir(VECTOR_DIR)

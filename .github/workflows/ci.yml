@@ -69,5 +69,8 @@ jobs:
       # Runs the same 27 vectors the Rust validator runs. ADR-0001 §4: two independent
       # implementations agreeing is the evidence engine neutrality rests on, so this is not
       # a duplicate of the `protocol` job -- it is the other half of the proof.
+      # A GDScript compile error makes `godot --script` hang instead of exiting, so a broken
+      # client would sit here until the job's own limit rather than failing in seconds.
       - name: Unit tests and conformance vectors
+        timeout-minutes: 5
         run: godot --headless --path client-godot --script res://tests/run_tests.gd
