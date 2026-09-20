@@ -7,13 +7,14 @@ extends SceneTree
 
 const Conformance := preload("res://core/protocol/conformance.gd")
 const Harness := preload("res://tests/harness.gd")
+const TestHud := preload("res://tests/test_hud.gd")
 const TestInventory := preload("res://tests/test_inventory.gd")
 const TestProtocol := preload("res://tests/test_protocol.gd")
 const TestWorld := preload("res://tests/test_world.gd")
 
 const VECTOR_DIR := "res://protocol/conformance"
 ## Ratchet. Raise it when tests are added; never lower it to make a run pass.
-const MIN_CHECKS := 150
+const MIN_CHECKS := 180
 
 
 func _initialize() -> void:
@@ -24,6 +25,7 @@ func _initialize() -> void:
 	TestProtocol.run(t)
 	TestWorld.run(t, self)
 	TestInventory.run(t, self)
+	TestHud.run(t, self)
 	for f in t.failures:
 		print("  FAIL  %s" % f)
 	print("  %d checks, %d failed" % [t.checks, t.failures.size()])

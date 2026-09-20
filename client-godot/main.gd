@@ -11,6 +11,7 @@ signal item_collected(entity_id: String, item: String, count: int)
 signal notice(text: String)
 
 const Geometry := preload("res://core/world/geometry.gd")
+const Hud := preload("res://ui/hud.gd")
 const Inventory := preload("res://core/inventory/inventory.gd")
 const ItemCatalog := preload("res://core/inventory/item_catalog.gd")
 const LocalWorldSource := preload("res://core/world/local_world_source.gd")
@@ -30,6 +31,10 @@ var saves = null
 
 ## world_id -> { "consumed_pickups": Array[String] }. SPEC §10.
 var world_state: Dictionary = {}
+var hud = null
+## The player's language, used for every name they read. Item and world names ship in four
+## languages; showing them all in English would waste content that is already there.
+var locale := "en"
 var _created_at := ""
 
 ## A portal the player is standing in must not fire until they have stepped out of it.
@@ -56,6 +61,12 @@ func setup(source_root := "res://worlds", initial_world := INITIAL_WORLD,
 	inventory = Inventory.new()
 	saves = SaveManager.new(save_path)
 	_created_at = SaveManager.now_utc()
+	locale = OS.get_locale_language()
+
+	hud = Hud.new()
+	add_child(hud)
+	inventory.changed.connect(_refresh_hud)
+	notice.connect(func(text): hud.show_notice(text))
 
 	for id in registry.rejected():
 		push_error("world %s was refused and will not be offered: %s" % [id, registry.rejected()[id].findings])
@@ -93,8 +104,39 @@ func goto(world_id: String, spawn_name: String) -> bool:
 
 	player.place_top_left_at(Geometry.coord(at))
 	_portals_armed = false
+
+	if hud != null:
+		hud.set_world(
+			registry.display_name(world_id, locale),
+			Geometry.color(registry.world(world_id).get("background", null), Color.BLACK))
+		_refresh_hud()
+
 	world_changed.emit(world_id)
 	return true
+
+
+## One row per stack, in slot order. Split stacks stay separate on screen because they are
+## separate in the save -- collapsing them in the display would hide a distinction the rest
+## of the client is careful to preserve.
+func inventory_rows() -> Array:
+	var rows: Array = []
+	if inventory == null:
+		return rows
+	for stack in inventory.stacks:
+		var item_id: String = stack["item"]
+		var origin_world: String = item_id.split(":")[0]
+		rows.append({
+			"icon": catalog.icon_color(item_id),
+			"name": catalog.display_name(item_id, locale),
+			"origin": registry.display_name(origin_world, locale),
+			"count": stack["count"],
+		})
+	return rows
+
+
+func _refresh_hud() -> void:
+	if hud != null:
+		hud.set_rows(inventory_rows())
 
 
 func _physics_process(_delta: float) -> void:
@@ -156,14 +198,14 @@ func capture_state() -> Dictionary:
 
 func save_game() -> bool:
 	var ok: bool = saves.write(capture_state())
-	notice.emit("saved" if ok else "save failed: %s" % saves.last_error)
+	notice.emit("Saved." if ok else "Save failed: %s" % saves.last_error)
 	return ok
 
 
 func load_game() -> bool:
 	var doc: Variant = saves.read()
 	if doc == null:
-		notice.emit("load failed: %s" % saves.last_error)
+		notice.emit("Load failed: %s" % saves.last_error)
 		return false
 	return apply_state(doc)
 
@@ -178,6 +220,7 @@ func apply_state(doc: Dictionary) -> bool:
 	_created_at = str(doc.get("created_at", SaveManager.now_utc()))
 	catalog.load_snapshot(doc.get("item_defs", {}))
 	inventory.from_save(doc.get("inventory", {}).get("stacks", []))
+	_refresh_hud()
 
 	var state: Variant = doc.get("world_state", {})
 	world_state = state.duplicate(true) if typeof(state) == TYPE_DICTIONARY else {}
@@ -187,15 +230,15 @@ func apply_state(doc: Dictionary) -> bool:
 	var at: Vector2 = Geometry.coord(saved_player.get("at", null))
 
 	if not registry.has(world_id):
-		notice.emit("world %s is no longer available; returning to %s" % [world_id, INITIAL_WORLD])
+		notice.emit("%s is no longer installed. Returning to %s." % [world_id, INITIAL_WORLD])
 		var fell_back := goto(INITIAL_WORLD, "default")
-		notice.emit("loaded" if fell_back else "load failed: no world to return to")
+		notice.emit("Loaded." if fell_back else "Load failed: no world left to return to.")
 		return fell_back
 
 	if not goto(world_id, "default"):
 		return false
 	player.place_top_left_at(at)
-	notice.emit("loaded")
+	notice.emit("Loaded.")
 	return true
 
 
@@ -203,6 +246,8 @@ func _unhandled_input(event: InputEvent) -> void:
 	if not (event is InputEventKey) or not event.pressed or event.echo:
 		return
 	match event.keycode:
+		KEY_I:
+			hud.toggle_inventory()
 		KEY_F5:
 			save_game()
 		KEY_F9:
@@ -212,7 +257,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _on_pickup_collected(entity_id: String, item: String, count: int, once: bool) -> void:
 	inventory.add(item, count, catalog.stack_limit(item))
 	item_collected.emit(entity_id, item, count)
-	notice.emit("picked up %s x%d" % [catalog.display_name(item), count])
+	notice.emit("Picked up %s ×%d" % [catalog.display_name(item, locale), count])
 	if once and runtime != null:
 		_record_consumed(runtime.world_id, entity_id)
 	if not once:

@@ -7,6 +7,7 @@ extends RefCounted
 ## site where somebody could forget.
 
 const Validator := preload("res://core/protocol/validator.gd")
+const WorldRuntime := preload("res://core/world/world_runtime.gd")
 const ValidationContext := preload("res://core/protocol/validation_context.gd")
 
 var _sources: Array = []
@@ -115,3 +116,14 @@ func spawn_point(world_id: String, spawn_name: String) -> Variant:
 	if typeof(chosen) != TYPE_DICTIONARY:
 		return null
 	return chosen.get("at", null)
+
+
+## The world's name in the player's language, or its id when it is not one we hold.
+##
+## Used for an item's origin: a stack can name a world that is no longer installed, and the
+## namespace is still the honest answer in that case.
+func display_name(world_id: String, locale := "en") -> String:
+	var w := world(world_id)
+	if w.is_empty():
+		return world_id
+	return WorldRuntime._localized(w.get("display_name", null), locale, world_id)

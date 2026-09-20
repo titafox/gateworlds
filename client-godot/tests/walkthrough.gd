@@ -81,6 +81,9 @@ func _process(delta: float) -> bool:
 	match step:
 		0:
 			if step_time > 0.4:
+				# Opened here rather than in _initialize: the game's own _ready has not run
+				# at that point, so there is no HUD to open yet.
+				main.hud.toggle_inventory()
 				_note("1. start           world=%s  top_left=%s" % [main.runtime.world_id, p])
 				if main.runtime.world_id != "pastoral_village":
 					failures.append("did not start in the village")
@@ -140,6 +143,8 @@ func _process(delta: float) -> bool:
 				% [carried, main.catalog.display_name("xianxia_gate:spirit_herb", "zh-CN")])
 			if carried < 1:
 				failures.append("the herb did not survive the walk back to the village")
+			if not main.hud.is_inventory_open():
+				failures.append("the inventory panel is not open")
 
 			if not main.save_game():
 				failures.append("save failed: %s" % main.saves.last_error)
