@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0e1116">
+<meta name="color-scheme" content="dark">
+<title>Gateworlds</title>
+<style>
+  :root { --panel:#11161c; --text:#e8e4d9; --dim:#7f8894; --hint:#7f8894; --signal:#9b7fe0; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; overflow:hidden; background:#0e1116;
+    font: 13px/1.35 system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", sans-serif;
+    -webkit-user-select:none; user-select:none; -webkit-tap-highlight-color:transparent; }
+  canvas { display:block; width:100%; height:100%; touch-action:none; }
+
+  /* Flat rectangles, no radius and no shadow: the interface is made of the same material as
+     the worlds, because at 0.1.0 a world is not allowed to be anything else. */
+  #hud { position:fixed; inset:0; pointer-events:none;
+         padding: env(safe-area-inset-top) env(safe-area-inset-right)
+                  env(safe-area-inset-bottom) env(safe-area-inset-left); }
+  #world-name { position:absolute; top:0; left:0; background:var(--panel); color:var(--text);
+                padding:6px 10px; }
+  #inventory { position:absolute; top:30px; left:0; width:176px; background:var(--panel);
+               display:none; }
+  #inventory.open { display:block; }
+  #rows { padding:6px 0; }
+  .row { display:grid; grid-template-columns:14px 1fr auto; column-gap:8px;
+         align-items:center; padding:5px 10px; color:var(--text); }
+  .row i { width:12px; height:12px; grid-row:1/3; }
+  .row b { font-weight:600; }
+  /* Where a thing came from is the interesting fact here, and the only place a player sees
+     that item ids carry an origin at all. */
+  .row small { grid-column:2/4; color:var(--dim); font-size:11px; }
+  .empty { padding:8px 10px; color:var(--text); }
+  .empty small { display:block; color:var(--dim); font-size:11px; }
+
+  #notice { position:absolute; left:50%; bottom:78px; transform:translateX(-50%);
+            background:var(--signal); color:#14171c; padding:5px 14px; opacity:0;
+            transition:opacity .28s; white-space:nowrap; }
+  #notice.show { opacity:1; }
+
+  #hints { position:absolute; left:10px; bottom:9px; color:var(--hint); font-size:11px; }
+  @media (pointer:coarse) { #hints { display:none; } }
+
+  #buttons { position:absolute; right:10px; bottom:10px; display:flex; gap:8px;
+             pointer-events:auto; }
+  /* 44px is the smallest target a thumb reliably hits. */
+  #buttons button { font:inherit; color:var(--text); background:var(--panel); border:0;
+                    min-width:58px; min-height:44px; padding:0 12px; }
+  #buttons button:active { background:var(--signal); color:#14171c; }
+
+  #stick { position:absolute; width:96px; height:96px; margin:-48px 0 0 -48px;
+           border:2px solid rgba(255,255,255,.22); border-radius:50%; display:none; }
+  #stick b { position:absolute; width:36px; height:36px; margin:-18px 0 0 -18px;
+             background:rgba(255,255,255,.3); border-radius:50%; }
+
+  #loading { position:fixed; inset:0; display:grid; place-content:center; gap:6px;
+             text-align:center; color:var(--dim); background:#0e1116; padding:24px; }
+  #loading b { color:var(--text); font-weight:600; font-size:16px; }
+</style>
+</head>
+<body>
+<canvas id="view"></canvas>
+
+<div id="hud">
+  <div id="world-name"></div>
+  <div id="inventory"><div id="rows"></div></div>
+  <div id="notice"></div>
+  <div id="hints">WASD / arrows to move &nbsp;&nbsp; I inventory &nbsp;&nbsp; F5 save &nbsp;&nbsp; F9 load</div>
+  <div id="buttons">
+    <button id="btn-bag" type="button">Bag</button>
+    <button id="btn-save" type="button">Save</button>
+    <button id="btn-load" type="button">Load</button>
+  </div>
+  <div id="stick"><b></b></div>
+</div>
+
+<div id="loading"><b>Gateworlds</b><span id="loading-text">Fetching worlds…</span></div>
+
+<script type="module" src="./main.js"></script>
+</body>
+</html>
