@@ -1,0 +1,10 @@
+{
+  "name": "gateworlds-client-web",
+  "private": true,
+  "type": "module",
+  "description": "A browser client for the Gateworlds world protocol. One of several implementations; see docs/adr/0001-engine-neutrality.md.",
+  "license": "0BSD",
+  "scripts": {
+    "test": "node --test tests/*.test.js"
+  }
+}

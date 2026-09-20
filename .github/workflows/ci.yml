@@ -74,3 +74,19 @@ jobs:
       - name: Unit tests and conformance vectors
         timeout-minutes: 5
         run: godot --headless --path client-godot --script res://tests/run_tests.gd
+
+  web:
+    name: client conformance (browser)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+
+      # The third implementation of the same protocol, held to the same vectors. No
+      # dependencies to install: node:test is built in and the client has none.
+      - name: Unit tests and conformance vectors
+        working-directory: client-web
+        run: node --test tests/*.test.js

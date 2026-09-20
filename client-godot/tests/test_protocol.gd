@@ -109,3 +109,20 @@ static func _schema_subset(t) -> void:
 	t.ok(not JsonSchema.validate(int_schema, 5.5).is_empty(), "a fractional float is not")
 	t.ok(not JsonSchema.validate(int_schema, "5").is_empty(), "a numeric string is not")
 	t.ok(not JsonSchema.validate({"type": "number"}, true).is_empty(), "a bool is not a number")
+
+	# JSON Schema uses ECMA-262 regular expressions, where `$` without the `m` flag means end
+	# of input. PCRE2's `$` also matches before a final newline, so without rewriting, this
+	# implementation accepted a slug the Rust and browser validators both rejected -- a
+	# package the server refuses and a client loads.
+	var slug := {"type": "string", "pattern": "^[a-z0-9]([a-z0-9_]*[a-z0-9])?$"}
+	t.ok(JsonSchema.validate(slug, "abc").is_empty(), "a plain slug is accepted")
+	t.ok(not JsonSchema.validate(slug, "abc\n").is_empty(),
+		"a trailing newline is rejected, as ECMA-262 requires")
+	t.ok(not JsonSchema.validate(slug, "abc\ndef").is_empty(), "an embedded newline too")
+
+	# The rewrite must not touch a dollar that is meant literally.
+	t.eq(JsonSchema._ecma_anchors("^a$"), "^a\\z", "a trailing anchor becomes \\z")
+	t.eq(JsonSchema._ecma_anchors("^a\\$b$"), "^a\\$b\\z", "an escaped dollar is left alone")
+	t.eq(JsonSchema._ecma_anchors("^[a$]+$"), "^[a$]+\\z", "a dollar in a character class is literal")
+	t.ok(JsonSchema.validate({"type": "string", "pattern": "^[a$]+$"}, "a$a").is_empty(),
+		"and still matches as a literal")

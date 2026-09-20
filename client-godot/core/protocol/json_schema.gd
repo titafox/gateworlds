@@ -27,8 +27,45 @@ static var _regex_cache := {}
 
 static func _regex(pattern: String) -> RegEx:
 	if not _regex_cache.has(pattern):
-		_regex_cache[pattern] = RegEx.create_from_string(pattern)
+		_regex_cache[pattern] = RegEx.create_from_string(_ecma_anchors(pattern))
 	return _regex_cache[pattern]
+
+
+## Rewrites `$` to `\z` so that Godot's PCRE2 matches what JSON Schema specifies.
+##
+## JSON Schema uses ECMA-262 regular expressions, where `$` without the `m` flag means end of
+## input. PCRE2's `$` *also* matches just before a final newline, so `^[a-z0-9]+$` accepted
+## `"abc\n"` here while the Rust validator and the browser client both rejected it: a package
+## the server refuses and a client happily loads.
+##
+## The schema is normative and the engine's quirk is this implementation's problem, so the
+## pattern is rewritten rather than the schema changed. Escapes and character classes are
+## respected, because `\$` and `[$]` are literal dollars and must stay that way.
+##
+## Found by writing a third implementation. Two implementations agreeing proved nothing about
+## this, because neither had a reason to try it -- see
+## `protocol/conformance/invalid/world-id-trailing-newline.json`.
+static func _ecma_anchors(pattern: String) -> String:
+	var out := ""
+	var i := 0
+	var in_class := false
+	while i < pattern.length():
+		var c := pattern[i]
+		if c == "\\" and i + 1 < pattern.length():
+			out += c + pattern[i + 1]
+			i += 2
+			continue
+		if c == "[":
+			in_class = true
+		elif c == "]":
+			in_class = false
+		elif c == "$" and not in_class:
+			out += "\\z"
+			i += 1
+			continue
+		out += c
+		i += 1
+	return out
 
 
 ## Returns every keyword used anywhere in `schema` that this subset does not implement.

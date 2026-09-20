@@ -39,6 +39,7 @@ Implementations are consumers of the protocol, not owners of it:
 |---|---|---|
 | `protocol/` | Normative | Only by a governed protocol version bump |
 | `client-godot/` | **Provisional** | Any client that passes the conformance vectors |
+| `client-web/` | **Provisional** | Any client that passes the conformance vectors |
 | `server/` (Rust) | **Provisional** | Any server that passes the conformance vectors |
 
 ### 2. Where the line falls
@@ -76,6 +77,20 @@ is evidence. One implementation is just a habit.
 
 This also serves the security requirement: the server is the first gate on ingest, the
 client is the second gate on load. Neither trusts the other.
+
+**What the third implementation found, and why it matters to this argument.** A browser
+client was added after two implementations had agreed on 27 vectors for some time. Building
+it immediately exposed a disagreement the other two had never surfaced: JSON Schema
+specifies ECMA-262 regular expressions, where `$` means end of input, but Godot's PCRE2 also
+matches `$` before a final newline. A world id of `"abc\n"` was therefore **refused by the
+server and accepted by the client** — precisely the class of silent divergence this ADR
+claims the vectors prevent, sitting undetected because no vector had a reason to try it.
+
+Two implementations agreeing is weaker evidence than it looks: they agree on the cases
+somebody thought to write down. Each further implementation is not redundancy, it is a new
+reader of the specification with different assumptions, and the disagreements it surfaces
+become vectors. The fix went into the implementation rather than the schema, because the
+schema is normative and an engine's quirk is that engine's problem to absorb.
 
 ### 5. The README names no engine
 

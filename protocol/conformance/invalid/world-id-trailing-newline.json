@@ -1,0 +1,33 @@
+{
+  "$vector": {
+    "kind": "world",
+    "expect": "invalid",
+    "errors": [
+      {
+        "code": "schema_violation",
+        "path": "/id"
+      }
+    ],
+    "note": "A slug with a trailing newline. Found by building a third implementation, not by reading the spec. JSON Schema specifies ECMA-262 regular expressions, where `$` without the `m` flag means end of input. PCRE2's `$` also matches just before a final newline, so `^[a-z0-9]...$` accepted \"abc\\n\" in the Godot client while the Rust validator and the browser client both rejected it -- a package the server would refuse and a client would load. Two implementations agreeing proved nothing here because neither had a reason to try it; this vector is that reason."
+  },
+  "document": {
+    "protocol_version": "0.1.0",
+    "id": "abc\n",
+    "display_name": {
+      "en": "W"
+    },
+    "bounds": {
+      "width": 64,
+      "height": 64
+    },
+    "spawns": {
+      "default": {
+        "at": [
+          0,
+          0
+        ]
+      }
+    },
+    "entities": []
+  }
+}
