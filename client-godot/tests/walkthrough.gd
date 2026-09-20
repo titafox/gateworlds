@@ -119,6 +119,8 @@ func _process(delta: float) -> bool:
 			else:
 				_timed_out("walking to the herb", 10.0)
 		5:
+			if main.inventory.total("xianxia_gate:spirit_herb") < 1:
+				failures.append("walked over the herb but did not pick it up")
 			# Back west through the return portal at x 32..80, y 216..264.
 			var target := Vector2(56, 232)
 			var d2 := target - p
@@ -132,6 +134,28 @@ func _process(delta: float) -> bool:
 			else:
 				_timed_out("walking back through the return portal", 12.0)
 		6:
+			# The milestone's claim, in the running game rather than in a headless assertion.
+			var carried: int = main.inventory.total("xianxia_gate:spirit_herb")
+			_note("7. in village       carrying %d x %s"
+				% [carried, main.catalog.display_name("xianxia_gate:spirit_herb", "zh-CN")])
+			if carried < 1:
+				failures.append("the herb did not survive the walk back to the village")
+
+			if not main.save_game():
+				failures.append("save failed: %s" % main.saves.last_error)
+			main.inventory.clear()
+			_note("8. after clearing   carrying %d" % main.inventory.total("xianxia_gate:spirit_herb"))
+			if not main.load_game():
+				failures.append("load failed: %s" % main.saves.last_error)
+			var restored: int = main.inventory.total("xianxia_gate:spirit_herb")
+			_note("9. after reload     world=%s  carrying %d x %s"
+				% [main.runtime.world_id, restored,
+				   main.catalog.display_name("xianxia_gate:spirit_herb", "zh-CN")])
+			if restored < 1:
+				failures.append("the herb did not survive a save/load round trip")
+			_advance("06_after_reload")
+			return false
+		7:
 			var f := FileAccess.open("%s/walkthrough.txt" % shots, FileAccess.WRITE)
 			if f != null:
 				f.store_string("\n".join(log_lines) + "\n")

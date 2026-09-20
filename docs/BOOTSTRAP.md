@@ -82,7 +82,8 @@ runs**. Exits non-zero on failure.
 godot --path client-godot
 ```
 
-Arrow keys or WASD. Walk east from the village into the portal.
+Arrow keys or WASD. Walk east from the village into the portal, pick up the herb, walk
+back. `F5` saves, `F9` loads.
 
 There is also a scripted walkthrough that drives the real game, lets the real portal
 triggers fire, and saves screenshots:
@@ -100,8 +101,8 @@ Two copies of a schema are two schemas.
 
 ## What is not here yet
 
-- **The playable client.** The protocol layer is done and tested; world loading, the player,
-  portals, inventory and saves are not written.
+- **Any interface.** There is no inventory panel and no on-screen text: the herb is in the
+  save file and in the log, not on the screen. That is the next milestone.
 - **The registry service.** There is none by design — the registry is static files, see
   [REGISTRY.md](REGISTRY.md).
 

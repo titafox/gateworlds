@@ -16,7 +16,12 @@ const WorldRuntime := preload("res://core/world/world_runtime.gd")
 
 ## `world` must already have passed validation -- see WorldRegistry. Passing an unvalidated
 ## document here is a programming error, not a user error, so the loader does not re-check.
-static func build(world: Dictionary) -> WorldRuntime:
+##
+## `consumed` lists entity ids whose `once` pickup has already been taken in this save. Those
+## entities are not built at all, which matches what happens at runtime when one is collected:
+## the whole entity goes, not just its pickup. A herb that reappeared on reload -- or left its
+## sprite behind with nothing to collect -- would both be wrong in the same way.
+static func build(world: Dictionary, consumed: Array = []) -> WorldRuntime:
 	var rt := WorldRuntime.new()
 	rt.world = world
 	rt.world_id = str(world.get("id", ""))
@@ -37,6 +42,8 @@ static func build(world: Dictionary) -> WorldRuntime:
 		if typeof(entity) != TYPE_DICTIONARY:
 			continue
 		var entity_id := str(entity.get("id", ""))
+		if consumed.has(entity_id):
+			continue
 		var holder := Node2D.new()
 		holder.name = "Entity_%s" % entity_id
 		holder.position = Geometry.coord(entity.get("at", null))
