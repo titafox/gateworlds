@@ -14,6 +14,7 @@ use sha2::{Digest, Sha256};
 
 pub const REGISTRY_VERSION: &str = "0.1.0";
 
+#[derive(Debug)]
 pub struct Outcome {
     pub published: Vec<String>,
     pub rejected: Vec<(String, Report)>,
@@ -41,6 +42,8 @@ pub fn build(src_dir: &Path, out_dir: &Path, generated_at: &str) -> Result<Outco
     if dirs.is_empty() {
         return Err(format!("no world packages under {}", src_dir.display()));
     }
+
+    refuse_to_clobber(out_dir)?;
 
     let staging = out_dir.with_extension("staging");
     let _ = std::fs::remove_dir_all(&staging);
@@ -122,6 +125,13 @@ pub fn build(src_dir: &Path, out_dir: &Path, generated_at: &str) -> Result<Outco
         "worlds": entries,
     });
     std::fs::write(staging.join("v0/index.json"), to_pretty(&index)).map_err(|e| e.to_string())?;
+    std::fs::write(
+        staging.join(MARKER),
+        b"Written by `gateworlds-validate publish`. Its presence is what allows a later run \
+to replace this directory; remove it and the tool will refuse rather than delete files it \
+did not write.\n" as &[u8],
+    )
+    .map_err(|e| e.to_string())?;
 
     // Swap last, so a reader never sees a half-written registry.
     let previous = out_dir.with_extension("previous");
@@ -134,6 +144,47 @@ pub fn build(src_dir: &Path, out_dir: &Path, generated_at: &str) -> Result<Outco
 
     Ok(outcome)
 }
+
+/// Refuses an output directory that is not already a registry.
+///
+/// `build` replaces the output wholesale, which is what makes a withdrawn world stop being
+/// reachable. Pointed at anything else, that same behaviour deletes it. This is not a
+/// hypothetical: during development `publish worlds client-web` was run in the belief that
+/// the second argument was a place to put a registry *inside*, and it replaced the entire
+/// web client with one.
+///
+/// So the output must be absent, empty, or carry the marker below. A tool whose most
+/// destructive behaviour is also its correct behaviour has to be certain about its target.
+fn refuse_to_clobber(out_dir: &Path) -> Result<(), String> {
+    if !out_dir.exists() {
+        return Ok(());
+    }
+    if !out_dir.is_dir() {
+        return Err(format!(
+            "{} exists and is not a directory",
+            out_dir.display()
+        ));
+    }
+    let mut entries = std::fs::read_dir(out_dir)
+        .map_err(|e| format!("{}: {e}", out_dir.display()))?
+        .flatten()
+        .peekable();
+    if entries.peek().is_none() {
+        return Ok(());
+    }
+    if out_dir.join(MARKER).is_file() {
+        return Ok(());
+    }
+    Err(format!(
+        "{} is not empty and does not look like a registry (no {MARKER}).\n\
+         This command REPLACES its output directory, so it will not write there.\n\
+         Point it at a new directory, or delete that one first if it really is a registry.",
+        out_dir.display()
+    ))
+}
+
+/// Written into every registry so that a later run can recognise its own output.
+const MARKER: &str = ".gateworlds-registry";
 
 /// Every file in the package, relative to its root, sorted for a reproducible manifest.
 fn package_files(dir: &Path) -> Result<Vec<String>, String> {
