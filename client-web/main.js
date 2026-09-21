@@ -108,6 +108,7 @@ async function boot() {
   loading.remove();
   if (storage.ephemeral) hud.notice('Saving is off: this browser blocks storage.');
 
+
   const stickEl = document.getElementById('stick');
   const knobEl = stickEl.querySelector('b');
   const controls = new Controls(document.getElementById('view'), {
@@ -122,6 +123,10 @@ async function boot() {
   document.getElementById('btn-save').onclick = () => game.save();
   document.getElementById('btn-load').onclick = () => game.load();
   addEventListener('resize', () => view.resize());
+  // A handle for whoever is debugging a world they are writing. Read it from the console to
+  // see where the player is, what loaded and what was refused -- the alternative is guessing
+  // from a screenshot, which is how an afternoon disappears.
+  globalThis.gateworlds = { game, registry, view, hud, controls };
 
   let last = performance.now();
   const frame = (now) => {

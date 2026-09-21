@@ -10,6 +10,19 @@
 
 import * as THREE from '../vendor/three.module.min.js';
 
+/// How much world to keep on screen, in protocol units.
+///
+/// A fixed camera distance shows wildly different amounts of a world depending on the
+/// screen: a wide desktop window has a narrow vertical field and ends up pressed against
+/// the player, while a tall phone sees far too much. So the distance is computed from the
+/// field of view and the aspect instead, and both axes are honoured -- otherwise a portrait
+/// phone gets a comfortable depth and a letterbox of width.
+/// Never more than this, and never more than the world itself -- framing empty space beyond
+/// the edge of a small world tells the player nothing and makes everything in it smaller.
+const VISIBLE_DEPTH = 430;
+const VISIBLE_WIDTH = 430;
+const TILT = (56 * Math.PI) / 180;
+
 const WALL_HEIGHT = 22;
 const FLAT_HEIGHT = 1.5;
 const TRIGGER_HEIGHT = 9;
@@ -39,6 +52,7 @@ export class SceneView {
     this.scene.add(this.player);
 
     this.bobbing = [];
+    this.bounds = { w: VISIBLE_WIDTH, h: VISIBLE_DEPTH };
     this.resize();
   }
 
@@ -55,6 +69,7 @@ export class SceneView {
   /// fast enough that nobody can tell.
   setWorld(runtime) {
     this.bobbing = [];
+    this.bounds = runtime.bounds;
     this.worldGroup.clear();
 
     const ground = new THREE.Color(runtime.background.hex);
@@ -97,15 +112,28 @@ export class SceneView {
   render(player, elapsed) {
     this.player.position.set(player.x + 8, PLAYER_HEIGHT / 2, player.y + 8);
 
+    // Bobbing only, never spinning. A rotating box changes its apparent footprint while its
+    // trigger rectangle stays put, so it would advertise a way in at the corners that does
+    // not exist. Motion here marks the two things that respond to you; it must not lie about
+    // where they respond.
     for (const b of this.bobbing) {
       b.mesh.position.y = b.base + Math.sin(elapsed * 2 + b.phase * 0.05) * 2;
-      b.mesh.rotation.y = elapsed * 0.55;
     }
 
-    // Behind and above, looking down the way you are walking. Close enough that a phone
-    // screen still shows the room you are in.
-    this.camera.position.set(this.player.position.x, 150, this.player.position.z + 118);
-    this.camera.lookAt(this.player.position.x, 0, this.player.position.z - 26);
+    // Behind and above, looking down the way you are walking, far enough back that the room
+    // you are in fits on whatever screen you are holding.
+    const vFov = (this.camera.fov * Math.PI) / 180;
+    const hFov = 2 * Math.atan(Math.tan(vFov / 2) * this.camera.aspect);
+    const wantDepth = Math.min(VISIBLE_DEPTH, this.bounds.h);
+    const wantWidth = Math.min(VISIBLE_WIDTH, this.bounds.w);
+    const distance = Math.max(
+      wantDepth / 2 / Math.tan(vFov / 2),
+      wantWidth / 2 / Math.tan(hFov / 2),
+    );
+
+    const { x, z } = this.player.position;
+    this.camera.position.set(x, Math.sin(TILT) * distance, z + Math.cos(TILT) * distance);
+    this.camera.lookAt(x, 0, z - distance * 0.12);
 
     this.renderer.render(this.scene, this.camera);
   }
