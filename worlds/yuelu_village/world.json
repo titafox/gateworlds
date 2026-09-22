@@ -23,8 +23,8 @@
   "spawns": {
     "default": {
       "at": [
-        304,
-        160
+        200,
+        208
       ]
     },
     "from_stair": {

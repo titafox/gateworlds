@@ -241,3 +241,73 @@ fn no_two_shipped_worlds_claim_the_same_id() {
     }
     assert!(problems.is_empty(), "duplicate world ids:\n{problems}");
 }
+
+/// A spawn must not sit inside something solid.
+///
+/// Arriving inside a wall is the worst kind of world bug: the package validates, the client
+/// loads it, and the player is simply stuck with nothing to read. It is also easy to create
+/// by moving a building and forgetting the spawn it used to sit beside.
+///
+/// This does not check that anywhere is *reachable* -- that is a pathfinding question and a
+/// house in the way is a design decision, not an error. It checks the one case that is
+/// never a decision.
+#[test]
+fn no_spawn_point_sits_inside_something_solid() {
+    const PLAYER: i64 = 16;
+
+    let worlds = repo_root().join("worlds");
+    let mut dirs: Vec<PathBuf> = std::fs::read_dir(&worlds)
+        .expect("worlds/ should exist")
+        .flatten()
+        .map(|e| e.path())
+        .filter(|p| p.is_dir())
+        .collect();
+    dirs.sort();
+
+    let mut problems = String::new();
+    let mut checked = 0;
+
+    for dir in &dirs {
+        let doc: Value = serde_json::from_str(
+            &std::fs::read_to_string(dir.join("world.json")).expect("readable"),
+        )
+        .expect("json");
+        let world_id = doc["id"].as_str().unwrap_or_default();
+
+        // Every solid rectangle in the world, in absolute coordinates.
+        let mut solids: Vec<(i64, i64, i64, i64)> = Vec::new();
+        for entity in doc["entities"].as_array().into_iter().flatten() {
+            let ax = entity["at"][0].as_i64().unwrap_or(0);
+            let ay = entity["at"][1].as_i64().unwrap_or(0);
+            for component in entity["components"].as_array().into_iter().flatten() {
+                if component["type"] != "solid" {
+                    continue;
+                }
+                let ox = component["offset"][0].as_i64().unwrap_or(0);
+                let oy = component["offset"][1].as_i64().unwrap_or(0);
+                let w = component["size"][0].as_i64().unwrap_or(0);
+                let h = component["size"][1].as_i64().unwrap_or(0);
+                solids.push((ax + ox, ay + oy, w, h));
+            }
+        }
+
+        for (name, spawn) in doc["spawns"].as_object().into_iter().flatten() {
+            let sx = spawn["at"][0].as_i64().unwrap_or(0);
+            let sy = spawn["at"][1].as_i64().unwrap_or(0);
+            checked += 1;
+
+            for (x, y, w, h) in &solids {
+                let overlaps = sx < x + w && *x < sx + PLAYER && sy < y + h && *y < sy + PLAYER;
+                if overlaps {
+                    problems.push_str(&format!(
+                        "  {world_id} spawn {name:?} at [{sx}, {sy}] is inside a solid at \
+                         [{x}, {y}] {w}x{h}\n"
+                    ));
+                }
+            }
+        }
+    }
+
+    assert!(checked >= 2, "expected several spawns, checked {checked}");
+    assert!(problems.is_empty(), "spawns inside walls:\n{problems}");
+}
