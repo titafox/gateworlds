@@ -6,6 +6,7 @@
 use std::path::{Path, PathBuf};
 
 use gateworlds_protocol::{conformance, validate_package};
+use serde_json::Value;
 
 /// The repository root, from this crate's manifest directory.
 fn repo_root() -> PathBuf {
@@ -96,67 +97,71 @@ fn every_shipped_world_package_validates() {
     );
 }
 
-/// The two reference worlds must actually reach each other. A portal naming a world that is
-/// not shipped would validate fine on its own -- resolution happens at travel time -- and
-/// the player would hit a dead end at runtime.
-#[test]
-fn the_two_reference_worlds_link_to_each_other() {
-    let worlds = repo_root().join("worlds");
-    let read = |id: &str| -> serde_json::Value {
-        let p = worlds.join(id).join("world.json");
-        serde_json::from_str(&std::fs::read_to_string(&p).expect("readable")).expect("json")
-    };
-
-    for (from, to) in [
-        ("pastoral_village", "xianxia_gate"),
-        ("xianxia_gate", "pastoral_village"),
-    ] {
-        let src = read(from);
-        let dst = read(to);
-
-        let portal = src["entities"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .flat_map(|e| e["components"].as_array().unwrap())
-            .find(|c| c["type"] == "portal" && c["target_world"] == to)
-            .unwrap_or_else(|| panic!("{from} has no portal to {to}"));
-
-        let spawn = portal["target_spawn"].as_str().unwrap_or("default");
-        assert!(
-            dst["spawns"].get(spawn).is_some(),
-            "{from} sends the player to {to} spawn {spawn:?}, which {to} does not define"
-        );
-    }
-}
-
-/// Regression: validating a `world.json` on its own must still resolve the item definitions
-/// sitting next to it.
+/// Every portal that names a world we ship must land on a spawn that world actually has.
 ///
-/// Without this, every `pickup` in a real package is reported as an unresolved reference --
-/// a false positive that blames the creator for the tool's blind spot. Found by running
-/// `docs/BOOTSTRAP.md` verbatim on a clean clone, which is the only way that document is
-/// worth anything.
+/// A portal may name a world this client does not hold -- SPEC §7.3 allows it, and
+/// resolution happens at travel time. But a portal pointing at a *shipped* world with a
+/// spawn name nobody defined is a dead end that validation cannot see, because each package
+/// is valid on its own. It is only wrong in company.
+///
+/// This replaced a test that checked two specific worlds by name. That version stopped
+/// being enough the moment a third world was added, which is the usual fate of a test that
+/// knows its subjects by name.
 #[test]
-fn validating_a_world_file_alone_resolves_its_sibling_items() {
-    use gateworlds_protocol::{DocKind, context_for_file, validate};
+fn every_portal_into_a_shipped_world_lands_on_a_spawn_that_exists() {
+    let worlds = repo_root().join("worlds");
+    let mut docs: std::collections::BTreeMap<String, Value> = std::collections::BTreeMap::new();
 
-    let file = repo_root().join("worlds/xianxia_gate/world.json");
-    let doc: serde_json::Value =
-        serde_json::from_str(&std::fs::read_to_string(&file).expect("readable")).expect("json");
+    let mut dirs: Vec<PathBuf> = std::fs::read_dir(&worlds)
+        .expect("worlds/ should exist")
+        .flatten()
+        .map(|e| e.path())
+        .filter(|p| p.is_dir())
+        .collect();
+    dirs.sort();
 
-    let ctx = context_for_file(DocKind::World, &doc, &file);
+    for dir in &dirs {
+        let doc: Value = serde_json::from_str(
+            &std::fs::read_to_string(dir.join("world.json")).expect("readable"),
+        )
+        .expect("json");
+        docs.insert(doc["id"].as_str().unwrap_or_default().to_string(), doc);
+    }
     assert!(
-        ctx.known_items.contains("xianxia_gate:spirit_herb"),
-        "the sibling items.json was not picked up: {:?}",
-        ctx.known_items
+        docs.len() >= 2,
+        "expected several worlds, found {}",
+        docs.len()
     );
 
-    let report = validate(DocKind::World, &doc, &ctx);
+    let mut problems = String::new();
+    let mut checked = 0;
+
+    for (from, doc) in &docs {
+        for entity in doc["entities"].as_array().into_iter().flatten() {
+            for component in entity["components"].as_array().into_iter().flatten() {
+                if component["type"] != "portal" {
+                    continue;
+                }
+                let to = component["target_world"].as_str().unwrap_or_default();
+                let Some(target) = docs.get(to) else { continue }; // not shipped: allowed
+                checked += 1;
+                let spawn = component["target_spawn"].as_str().unwrap_or("default");
+                if target["spawns"].get(spawn).is_none() {
+                    problems.push_str(&format!(
+                        "  {from} sends the player to {to} spawn {spawn:?}, which {to} does not define\n"
+                    ));
+                }
+            }
+        }
+    }
+
     assert!(
-        report.is_ok(),
-        "expected no findings, got: {:?}",
-        report.findings
+        checked > 0,
+        "no portal pointed at a shipped world; the worlds are disconnected"
+    );
+    assert!(
+        problems.is_empty(),
+        "dead ends between shipped worlds:\n{problems}"
     );
 }
 

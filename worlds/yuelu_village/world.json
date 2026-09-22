@@ -1,0 +1,411 @@
+{
+  "protocol_version": "0.1.0",
+  "id": "yuelu_village",
+  "display_name": {
+    "zh-CN": "月麓村",
+    "en": "Moonfoot Village",
+    "ru": "Деревня Лунного Подножия",
+    "ja": "月麓の村"
+  },
+  "description": {
+    "zh-CN": "山脚下的村子。这里的人一辈子抬头看山，没几个上去过。",
+    "en": "A village at the foot of the mountain. People here spend a lifetime looking up at it. Few go."
+  },
+  "license": {
+    "code": "0BSD",
+    "assets": "CC0-1.0"
+  },
+  "bounds": {
+    "width": 640,
+    "height": 480
+  },
+  "background": "#3b3a2e",
+  "spawns": {
+    "default": {
+      "at": [
+        304,
+        160
+      ]
+    },
+    "from_stair": {
+      "at": [
+        500,
+        224
+      ]
+    }
+  },
+  "entities": [
+    {
+      "id": "wall_n",
+      "at": [
+        0,
+        0
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            640,
+            16
+          ],
+          "color": "#4a4038",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            640,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wall_s",
+      "at": [
+        0,
+        464
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            640,
+            16
+          ],
+          "color": "#4a4038",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            640,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wall_w",
+      "at": [
+        0,
+        0
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            16,
+            480
+          ],
+          "color": "#4a4038",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            16,
+            480
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wall_e",
+      "at": [
+        624,
+        0
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            16,
+            480
+          ],
+          "color": "#4a4038",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            16,
+            480
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hut_west",
+      "at": [
+        64,
+        80
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            110,
+            84
+          ],
+          "color": "#6b5640",
+          "z": 0
+        },
+        {
+          "type": "solid",
+          "size": [
+            110,
+            84
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hut_south",
+      "at": [
+        180,
+        300
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            96,
+            72
+          ],
+          "color": "#6b5640",
+          "z": 0
+        },
+        {
+          "type": "solid",
+          "size": [
+            96,
+            72
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hut_east",
+      "at": [
+        420,
+        96
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            120,
+            90
+          ],
+          "color": "#6b5640",
+          "z": 0
+        },
+        {
+          "type": "solid",
+          "size": [
+            120,
+            90
+          ]
+        }
+      ]
+    },
+    {
+      "id": "thatch_west",
+      "at": [
+        64,
+        68
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            110,
+            14
+          ],
+          "color": "#8a7648",
+          "z": -1
+        }
+      ]
+    },
+    {
+      "id": "thatch_east",
+      "at": [
+        420,
+        84
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            120,
+            14
+          ],
+          "color": "#8a7648",
+          "z": -1
+        }
+      ]
+    },
+    {
+      "id": "well",
+      "at": [
+        300,
+        240
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            48,
+            48
+          ],
+          "color": "#3a4a55",
+          "z": 0
+        },
+        {
+          "type": "solid",
+          "size": [
+            48,
+            48
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cart_track",
+      "at": [
+        40,
+        232
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            120,
+            14
+          ],
+          "color": "#5a5344",
+          "z": -5
+        }
+      ]
+    },
+    {
+      "id": "rice_1",
+      "at": [
+        150,
+        200
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            16,
+            16
+          ],
+          "color": "#c9bd93",
+          "z": 1
+        },
+        {
+          "type": "pickup",
+          "size": [
+            20,
+            20
+          ],
+          "offset": [
+            -2,
+            -2
+          ],
+          "item": "yuelu_village:coarse_rice",
+          "count": 1,
+          "once": true
+        }
+      ]
+    },
+    {
+      "id": "firewood_1",
+      "at": [
+        470,
+        330
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            16,
+            16
+          ],
+          "color": "#6b4a2f",
+          "z": 1
+        },
+        {
+          "type": "pickup",
+          "size": [
+            20,
+            20
+          ],
+          "offset": [
+            -2,
+            -2
+          ],
+          "item": "yuelu_village:firewood",
+          "count": 1,
+          "once": true
+        }
+      ]
+    },
+    {
+      "id": "mountain_path",
+      "at": [
+        568,
+        208
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            56,
+            64
+          ],
+          "color": "#9b7fe0",
+          "z": 1
+        },
+        {
+          "type": "portal",
+          "size": [
+            56,
+            64
+          ],
+          "target_world": "cloud_stair",
+          "target_spawn": "from_village"
+        }
+      ]
+    },
+    {
+      "id": "cart_road_west",
+      "at": [
+        16,
+        208
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            48,
+            64
+          ],
+          "color": "#7f7fc0",
+          "z": 1
+        },
+        {
+          "type": "portal",
+          "size": [
+            48,
+            64
+          ],
+          "target_world": "pastoral_village",
+          "target_spawn": "default"
+        }
+      ]
+    }
+  ]
+}

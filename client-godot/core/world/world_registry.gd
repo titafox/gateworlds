@@ -72,6 +72,7 @@ func _ingest(source, id: String) -> void:
 
 	_validated[world_id] = {
 		"world": world,
+		"dir": "%s/%s" % [source.root, id] if source.get("root") != null else "",
 		"items": item_ids,
 		"items_doc": items_doc,
 		"source": source,
@@ -127,3 +128,14 @@ func display_name(world_id: String, locale := "en") -> String:
 	if w.is_empty():
 		return world_id
 	return WorldRuntime._localized(w.get("display_name", null), locale, world_id)
+
+
+## Where the package's files live, for components that reference one by path.
+##
+## Empty when the source has no directory -- a source that fetched a world over the network
+## has bytes rather than a path, and a component asking for a file it did not bring cannot
+## be served.
+func package_dir(world_id: String) -> String:
+	if not _validated.has(world_id):
+		return ""
+	return str(_validated[world_id].get("dir", ""))

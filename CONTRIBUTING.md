@@ -130,6 +130,19 @@ Three things worth knowing before you start moving numbers around:
   allowed to read it. That is how a world keeps its own rules without every other world
   having to agree (SPEC §1).
 
+## Art
+
+A `sprite` takes a colour or an image. [`docs/ART.md`](docs/ART.md) has the constraints the
+renderers impose, the naming convention, and a prompt to start from if you are generating
+textures. The short version: a texture is a **material**, not a picture of a thing, because
+the browser client wraps it around all six faces of a box.
+
+```sh
+# drop images at worlds/<world>/art/<entity_id>.png, then
+node scripts/wire-textures.mjs
+./server/target/release/gateworlds-validate package worlds/*
+```
+
 ## Writing a world with AI
 
 This is the workflow the project is built around, so it is worth stating plainly:

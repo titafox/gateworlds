@@ -20,7 +20,7 @@ const SaveManager := preload("res://core/save/save_manager.gd")
 const WorldLoader := preload("res://core/world/world_loader.gd")
 const WorldRegistry := preload("res://core/world/world_registry.gd")
 
-const INITIAL_WORLD := "pastoral_village"
+const INITIAL_WORLD := "yuelu_village"
 
 var registry = null
 var runtime = null
@@ -35,6 +35,10 @@ var hud = null
 ## The player's language, used for every name they read. Item and world names ship in four
 ## languages; showing them all in English would waste content that is already there.
 var locale := "en"
+## The world this session started in. A save naming a world that is gone returns the player
+## here -- to where *this* game began, not to a constant. A client embedded somewhere with a
+## different starting world would otherwise strand people in a world they never chose.
+var initial_world := INITIAL_WORLD
 var _created_at := ""
 
 ## A portal the player is standing in must not fire until they have stepped out of it.
@@ -50,8 +54,9 @@ func _ready() -> void:
 	setup()
 
 
-func setup(source_root := "res://worlds", initial_world := INITIAL_WORLD,
+func setup(source_root := "res://worlds", p_initial_world := INITIAL_WORLD,
 		save_path := SaveManager.DEFAULT_PATH) -> bool:
+	initial_world = p_initial_world
 	registry = WorldRegistry.new()
 	registry.add_source(LocalWorldSource.new(source_root))
 	registry.load_all()
@@ -93,7 +98,8 @@ func goto(world_id: String, spawn_name: String) -> bool:
 		remove_child(runtime.root)
 		runtime.root.queue_free()
 
-	runtime = WorldLoader.build(registry.world(world_id), consumed_in(world_id))
+	runtime = WorldLoader.build(
+		registry.world(world_id), consumed_in(world_id), registry.package_dir(world_id))
 	add_child(runtime.root)
 	move_child(runtime.root, 0)
 
@@ -230,8 +236,8 @@ func apply_state(doc: Dictionary) -> bool:
 	var at: Vector2 = Geometry.coord(saved_player.get("at", null))
 
 	if not registry.has(world_id):
-		notice.emit("%s is no longer installed. Returning to %s." % [world_id, INITIAL_WORLD])
-		var fell_back := goto(INITIAL_WORLD, "default")
+		notice.emit("%s is no longer installed. Returning to %s." % [world_id, initial_world])
+		var fell_back := goto(initial_world, "default")
 		notice.emit("Loaded." if fell_back else "Load failed: no world left to return to.")
 		return fell_back
 

@@ -53,6 +53,10 @@ export class SceneView {
 
     this.bobbing = [];
     this.bounds = { w: VISIBLE_WIDTH, h: VISIBLE_DEPTH };
+    // Textures are shared between meshes and between worlds. A world you walk back into
+    // should not pay for its art twice.
+    this.textures = new Map();
+    this.loader = new THREE.TextureLoader();
     this.resize();
   }
 
@@ -96,7 +100,10 @@ export class SceneView {
       const mesh = new THREE.Mesh(
         new THREE.BoxGeometry(v.rect.w, height, v.rect.h),
         new THREE.MeshLambertMaterial({
-          color: v.hex,
+          // A texture replaces the colour; the schema allows exactly one of the two
+          // (SPEC §7.1), so there is never a question of which wins.
+          map: v.texture ? this.#texture(v.texture) : null,
+          color: v.texture ? 0xffffff : v.hex,
           transparent: v.alpha < 1,
           opacity: v.alpha,
         }),
@@ -107,6 +114,23 @@ export class SceneView {
       // The only motion in the scene, and it marks the two things that respond to you.
       if (kind) this.bobbing.push({ mesh, base: height / 2, phase: v.centre.x + v.centre.y });
     }
+  }
+
+  /// Loads a texture once per URL.
+  ///
+  /// The URL is a data: URL the registry produced from bytes whose hash it checked, so
+  /// nothing here reaches the network -- the renderer cannot be pointed at an address a
+  /// package chose.
+  #texture(url) {
+    if (!this.textures.has(url)) {
+      const texture = this.loader.load(url);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      // Stylised art at small sizes: keep the edges rather than smearing them.
+      texture.magFilter = THREE.NearestFilter;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
+      this.textures.set(url, texture);
+    }
+    return this.textures.get(url);
   }
 
   render(player, elapsed) {

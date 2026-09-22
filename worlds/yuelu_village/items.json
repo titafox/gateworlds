@@ -1,0 +1,45 @@
+{
+  "protocol_version": "0.1.0",
+  "items": [
+    {
+      "id": "yuelu_village:coarse_rice",
+      "display_name": {
+        "zh-CN": "糙米",
+        "en": "Coarse Rice",
+        "ru": "Грубый рис",
+        "ja": "玄米"
+      },
+      "description": {
+        "zh-CN": "一捧带壳的米。在山下，这就是一天。",
+        "en": "A handful of unhusked rice. Down here, that is a day."
+      },
+      "icon": {
+        "color": "#c9bd93"
+      },
+      "stack_limit": 99,
+      "props": {
+        "nourishment": 1
+      }
+    },
+    {
+      "id": "yuelu_village:firewood",
+      "display_name": {
+        "zh-CN": "柴薪",
+        "en": "Firewood",
+        "ru": "Дрова",
+        "ja": "薪"
+      },
+      "description": {
+        "zh-CN": "砍好的柴。烧得完的东西，值不了几个钱。",
+        "en": "Cut wood. Things that burn away are not worth much."
+      },
+      "icon": {
+        "color": "#6b4a2f"
+      },
+      "stack_limit": 99,
+      "props": {
+        "burn_hours": 2
+      }
+    }
+  ]
+}

@@ -27,11 +27,16 @@ static func supported() -> Array:
 	return keys
 
 
-static func build(type_name: String, params: Dictionary) -> Node:
+static func build(type_name: String, params: Dictionary, base_dir := "") -> Node:
 	if not _BUILDERS.has(type_name):
 		# Unreachable for a validated package: the validator rejects unknown types before a
 		# document ever reaches the loader. Kept as a hard stop rather than a silent skip, so
 		# that a gap between the whitelist and this table cannot quietly become a missing node.
 		push_error("no builder for component type %s" % type_name)
 		return null
+	# Only `sprite` has anything to read from the package directory. Passing it to one
+	# builder and not the others would be a quiet special case; passing it to all of them
+	# keeps the signature honest about what a builder is allowed to see.
+	if type_name == "sprite":
+		return CompSprite.build(params, base_dir)
 	return _BUILDERS[type_name].build(params)

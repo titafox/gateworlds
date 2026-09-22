@@ -21,7 +21,7 @@ const WorldRuntime := preload("res://core/world/world_runtime.gd")
 ## entities are not built at all, which matches what happens at runtime when one is collected:
 ## the whole entity goes, not just its pickup. A herb that reappeared on reload -- or left its
 ## sprite behind with nothing to collect -- would both be wrong in the same way.
-static func build(world: Dictionary, consumed: Array = []) -> WorldRuntime:
+static func build(world: Dictionary, consumed: Array = [], base_dir := "") -> WorldRuntime:
 	var rt := WorldRuntime.new()
 	rt.world = world
 	rt.world_id = str(world.get("id", ""))
@@ -53,7 +53,7 @@ static func build(world: Dictionary, consumed: Array = []) -> WorldRuntime:
 			if typeof(component) != TYPE_DICTIONARY:
 				continue
 			var type_name := str(component.get("type", ""))
-			var node := ComponentRegistry.build(type_name, component)
+			var node := ComponentRegistry.build(type_name, component, base_dir)
 			if node == null:
 				continue
 			node.name = "%s_%s" % [type_name, entity_id]

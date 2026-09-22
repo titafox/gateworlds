@@ -1,0 +1,48 @@
+{
+  "protocol_version": "0.1.0",
+  "items": [
+    {
+      "id": "spirit_field:qingyuan_grass",
+      "display_name": {
+        "zh-CN": "青元草",
+        "en": "Green Origin Grass",
+        "ru": "Трава зелёного истока",
+        "ja": "青元草"
+      },
+      "description": {
+        "zh-CN": "一阶灵草，三年一熟。宗门收，价钱由宗门定。",
+        "en": "First-order, three years to ripen. The sect buys it, at the sect's price."
+      },
+      "icon": {
+        "color": "#7fe08a"
+      },
+      "stack_limit": 99,
+      "props": {
+        "spirit_qi": 3,
+        "grade": "一阶"
+      }
+    },
+    {
+      "id": "spirit_field:fireyang_blossom",
+      "display_name": {
+        "zh-CN": "火阳花",
+        "en": "Fireyang Blossom",
+        "ru": "Огненный цвет ян",
+        "ja": "火陽花"
+      },
+      "description": {
+        "zh-CN": "带火属性。碰多了手会起泡。",
+        "en": "Fire-natured. Handle it too long and your hands blister."
+      },
+      "icon": {
+        "color": "#e0603c"
+      },
+      "stack_limit": 99,
+      "props": {
+        "spirit_qi": 5,
+        "grade": "一阶",
+        "attribute": "火"
+      }
+    }
+  ]
+}

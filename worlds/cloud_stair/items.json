@@ -1,0 +1,26 @@
+{
+  "protocol_version": "0.1.0",
+  "items": [
+    {
+      "id": "cloud_stair:wild_lingzhi",
+      "display_name": {
+        "zh-CN": "野灵芝",
+        "en": "Wild Lingzhi",
+        "ru": "Дикий линчжи",
+        "ja": "野生霊芝"
+      },
+      "description": {
+        "zh-CN": "石缝里长的，没人种。灵气薄，但确实有。",
+        "en": "Grown in a crack, planted by nobody. Thin, but it is there."
+      },
+      "icon": {
+        "color": "#b4703c"
+      },
+      "stack_limit": 99,
+      "props": {
+        "spirit_qi": 1,
+        "grade": "野生"
+      }
+    }
+  ]
+}

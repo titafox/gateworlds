@@ -1,0 +1,48 @@
+{
+  "protocol_version": "0.1.0",
+  "items": [
+    {
+      "id": "qifeng_gate:low_spirit_stone",
+      "display_name": {
+        "zh-CN": "下品灵石",
+        "en": "Low-Grade Spirit Stone",
+        "ru": "Духовный камень низшего сорта",
+        "ja": "下級霊石"
+      },
+      "description": {
+        "zh-CN": "最次的一等。修士拿它当钱花，凡人拿它当石头。",
+        "en": "The lowest grade. Cultivators spend it. Mortals see a stone."
+      },
+      "icon": {
+        "color": "#8fd8c8"
+      },
+      "stack_limit": 99,
+      "props": {
+        "spirit_qi": 10,
+        "grade": "下品"
+      }
+    },
+    {
+      "id": "qifeng_gate:qi_gathering_pill",
+      "display_name": {
+        "zh-CN": "聚气丹",
+        "en": "Qi-Gathering Pill",
+        "ru": "Пилюля сбора ци",
+        "ja": "聚気丹"
+      },
+      "description": {
+        "zh-CN": "一品丹药。杂役一年能领两颗。",
+        "en": "A first-tier pill. A menial hand is issued two a year."
+      },
+      "icon": {
+        "color": "#d8a04a"
+      },
+      "stack_limit": 99,
+      "props": {
+        "spirit_qi": 25,
+        "grade": "一品",
+        "effect": "聚气"
+      }
+    }
+  ]
+}

@@ -11,6 +11,20 @@ import { Context, validate, KIND_ITEMS, KIND_WORLD } from '../protocol/validator
 import * as Version from '../protocol/version.js';
 import { localized } from './geometry.js';
 
+const MIME = {
+  png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg',
+  webp: 'image/webp', gif: 'image/gif', svg: 'image/svg+xml',
+};
+
+/// A data: URL rather than an object URL, so the same code works in a browser and under
+/// `node --test`, and nothing has to be revoked later. World textures are small.
+function dataUrl(path, bytes) {
+  const ext = path.split('.').pop().toLowerCase();
+  let binary = '';
+  for (const b of bytes) binary += String.fromCharCode(b);
+  return `data:${MIME[ext] ?? 'application/octet-stream'};base64,${btoa(binary)}`;
+}
+
 async function sha256Hex(bytes) {
   const digest = await crypto.subtle.digest('SHA-256', bytes);
   return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
@@ -48,6 +62,12 @@ export class Registry {
 
   itemsDoc(id) {
     return this.worlds.get(id)?.itemsDoc ?? null;
+  }
+
+  /// Package-relative path -> a URL the renderer can use. Only files that were fetched and
+  /// whose hashes matched are in here, so a renderer cannot be handed something unverified.
+  assets(id) {
+    return this.worlds.get(id)?.assets ?? new Map();
   }
 
   displayName(id, locale = 'en') {
@@ -106,12 +126,21 @@ export class Registry {
       const bytes = await this.fetchBytes(`${dir}/${f.path}`);
       if ((await sha256Hex(bytes)) !== f.sha256) throw new Error(`${f.path} hash mismatch`);
       if (bytes.byteLength !== f.size) throw new Error(`${f.path} size mismatch`);
-      files.set(f.path, JSON.parse(new TextDecoder().decode(bytes)));
+      // Images are verified exactly like the documents are. A texture is bytes a package
+      // asked a client to render; it gets the same treatment as bytes a package asked it to
+      // obey.
+      files.set(f.path, f.path.endsWith('.json')
+        ? JSON.parse(new TextDecoder().decode(bytes))
+        : dataUrl(f.path, bytes));
     }
 
     const world = files.get('world.json');
     if (!world) throw new Error('manifest lists no world.json');
     const itemsDoc = files.get('items.json') ?? null;
+    const assets = new Map();
+    for (const [path, value] of files) {
+      if (!path.endsWith('.json')) assets.set(path, value);
+    }
 
     const itemIds = (itemsDoc?.items ?? [])
       .filter((i) => typeof i?.id === 'string')
@@ -127,7 +156,7 @@ export class Registry {
       if (!itemsReport.ok) throw new Error(itemsReport.findings.map(String).join('; '));
     }
 
-    this.worlds.set(world.id, { world, itemsDoc, itemIds });
+    this.worlds.set(world.id, { world, itemsDoc, itemIds, assets });
   }
 
   async #fetchJson(url) {

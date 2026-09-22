@@ -1,0 +1,413 @@
+{
+  "protocol_version": "0.1.0",
+  "id": "spirit_field",
+  "display_name": {
+    "zh-CN": "灵田",
+    "en": "The Spirit Fields",
+    "ru": "Духовные поля",
+    "ja": "霊田"
+  },
+  "description": {
+    "zh-CN": "层层梯田。灵草长得慢，人也一样。",
+    "en": "Terraces, one above the next. Spirit herbs grow slowly. So does everyone here."
+  },
+  "license": {
+    "code": "0BSD",
+    "assets": "CC0-1.0"
+  },
+  "bounds": {
+    "width": 640,
+    "height": 480
+  },
+  "background": "#16301f",
+  "spawns": {
+    "default": {
+      "at": [
+        300,
+        200
+      ]
+    },
+    "from_gate": {
+      "at": [
+        290,
+        358
+      ]
+    }
+  },
+  "entities": [
+    {
+      "id": "wall_n",
+      "at": [
+        0,
+        0
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            640,
+            16
+          ],
+          "color": "#2f3a28",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            640,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wall_s",
+      "at": [
+        0,
+        464
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            640,
+            16
+          ],
+          "color": "#2f3a28",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            640,
+            16
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wall_w",
+      "at": [
+        0,
+        0
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            16,
+            480
+          ],
+          "color": "#2f3a28",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            16,
+            480
+          ]
+        }
+      ]
+    },
+    {
+      "id": "wall_e",
+      "at": [
+        624,
+        0
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            16,
+            480
+          ],
+          "color": "#2f3a28",
+          "z": -10
+        },
+        {
+          "type": "solid",
+          "size": [
+            16,
+            480
+          ]
+        }
+      ]
+    },
+    {
+      "id": "terrace_0",
+      "at": [
+        60,
+        80
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            520,
+            46
+          ],
+          "color": "#234a2c",
+          "z": -6
+        }
+      ]
+    },
+    {
+      "id": "terrace_1",
+      "at": [
+        60,
+        150
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            520,
+            46
+          ],
+          "color": "#234a2c",
+          "z": -6
+        }
+      ]
+    },
+    {
+      "id": "terrace_2",
+      "at": [
+        60,
+        220
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            520,
+            46
+          ],
+          "color": "#234a2c",
+          "z": -6
+        }
+      ]
+    },
+    {
+      "id": "terrace_3",
+      "at": [
+        60,
+        290
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            520,
+            46
+          ],
+          "color": "#234a2c",
+          "z": -6
+        }
+      ]
+    },
+    {
+      "id": "terrace_4",
+      "at": [
+        60,
+        360
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            520,
+            46
+          ],
+          "color": "#234a2c",
+          "z": -6
+        }
+      ]
+    },
+    {
+      "id": "channel",
+      "at": [
+        16,
+        232
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            608,
+            14
+          ],
+          "color": "#2f5d7a",
+          "z": -3
+        }
+      ]
+    },
+    {
+      "id": "stone_edge_north",
+      "at": [
+        60,
+        128
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            300,
+            14
+          ],
+          "color": "#3d4a34",
+          "z": 0
+        },
+        {
+          "type": "solid",
+          "size": [
+            300,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stone_edge_south",
+      "at": [
+        280,
+        268
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            300,
+            14
+          ],
+          "color": "#3d4a34",
+          "z": 0
+        },
+        {
+          "type": "solid",
+          "size": [
+            300,
+            14
+          ]
+        }
+      ]
+    },
+    {
+      "id": "shed",
+      "at": [
+        500,
+        90
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            86,
+            60
+          ],
+          "color": "#4a4038",
+          "z": 0
+        },
+        {
+          "type": "solid",
+          "size": [
+            86,
+            60
+          ]
+        }
+      ]
+    },
+    {
+      "id": "qingyuan_1",
+      "at": [
+        120,
+        190
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            16,
+            16
+          ],
+          "color": "#7fe08a",
+          "z": 1
+        },
+        {
+          "type": "pickup",
+          "size": [
+            20,
+            20
+          ],
+          "offset": [
+            -2,
+            -2
+          ],
+          "item": "spirit_field:qingyuan_grass",
+          "count": 1,
+          "once": true
+        }
+      ]
+    },
+    {
+      "id": "fireyang_1",
+      "at": [
+        470,
+        318
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            16,
+            16
+          ],
+          "color": "#e0603c",
+          "z": 1
+        },
+        {
+          "type": "pickup",
+          "size": [
+            20,
+            20
+          ],
+          "offset": [
+            -2,
+            -2
+          ],
+          "item": "spirit_field:fireyang_blossom",
+          "count": 1,
+          "once": true
+        }
+      ]
+    },
+    {
+      "id": "out_to_gate",
+      "at": [
+        280,
+        410
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            80,
+            54
+          ],
+          "color": "#9b7fe0",
+          "z": 1
+        },
+        {
+          "type": "portal",
+          "size": [
+            80,
+            54
+          ],
+          "target_world": "qifeng_gate",
+          "target_spawn": "from_field"
+        }
+      ]
+    }
+  ]
+}

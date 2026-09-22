@@ -17,7 +17,7 @@ const HANDLED = new Set(['sprite', 'solid', 'portal', 'pickup']);
 /// `consumed` lists entity ids whose `once` pickup has already been taken in this save.
 /// Those entities are not built at all, matching what happens at runtime when one is
 /// collected: the whole entity goes, not just its pickup.
-export function buildRuntime(world, consumed = []) {
+export function buildRuntime(world, consumed = [], assets = new Map()) {
   const skip = new Set(consumed);
   const runtime = {
     worldId: world.id,
@@ -53,6 +53,11 @@ export function buildRuntime(world, consumed = []) {
           entityId, rect, centre, blocks,
           ...color(component.color, 0xff00ff),
           z: Number(component.z ?? 0),
+          // Only a verified asset becomes a URL; an unresolved path stays null and the
+          // renderer falls back to the colour rather than silently drawing nothing.
+          texture: typeof component.texture === 'string'
+            ? (assets.get(component.texture) ?? null)
+            : null,
         });
       } else if (type === 'solid') {
         runtime.solids.push({ entityId, rect });

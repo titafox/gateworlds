@@ -237,7 +237,7 @@ test('a save written by the Godot client loads here', async () => {
     join(repoRoot, 'protocol/conformance/valid/save-cross-world-herb.json'), 'utf8'));
 
   const registry = await loadedRegistry();
-  const game = new Game({ registry, storage: new MemoryStorage() });
+  const game = new Game({ registry, storage: new MemoryStorage(), initialWorld: 'pastoral_village' });
   game.start();
 
   assert.ok(game.applyState(vector.document), 'the cross-world save applies');
@@ -250,7 +250,7 @@ test('a save written by the Godot client loads here', async () => {
 test('THE HERB COMES HOME: through the portal, back, saved, reopened', async () => {
   const registry = await loadedRegistry();
   const storage = new MemoryStorage();
-  const game = new Game({ registry, storage, locale: 'zh-CN' });
+  const game = new Game({ registry, storage, locale: 'zh-CN', initialWorld: 'pastoral_village' });
 
   assert.ok(game.start(), 'the game starts in the village');
   assert.deepEqual([game.player.x, game.player.y], [312, 232],
@@ -273,7 +273,7 @@ test('THE HERB COMES HOME: through the portal, back, saved, reopened', async () 
 
   assert.ok(game.save(), game.saves.lastError);
 
-  const reopened = new Game({ registry, storage, locale: 'zh-CN' });
+  const reopened = new Game({ registry, storage, locale: 'zh-CN', initialWorld: 'pastoral_village' });
   reopened.start();
   assert.equal(reopened.inventory.total(HERB), 0, 'a new session starts empty');
   assert.ok(reopened.load(), reopened.saves.lastError);
@@ -285,7 +285,7 @@ test('THE HERB COMES HOME: through the portal, back, saved, reopened', async () 
 
 test('a withdrawn world costs the player nothing', async () => {
   const registry = await loadedRegistry();
-  const game = new Game({ registry, storage: new MemoryStorage() });
+  const game = new Game({ registry, storage: new MemoryStorage(), initialWorld: 'pastoral_village' });
   game.start();
 
   assert.ok(game.applyState({
@@ -309,7 +309,7 @@ test('a withdrawn world costs the player nothing', async () => {
 
 test('a wall stops the player, and a portal does not fire on arrival', async () => {
   const registry = await loadedRegistry();
-  const game = new Game({ registry, storage: new MemoryStorage() });
+  const game = new Game({ registry, storage: new MemoryStorage(), initialWorld: 'pastoral_village' });
   game.start();
 
   for (let i = 0; i < 120; i += 1) game.update(1 / 60, { x: -1, y: 0 });
@@ -337,4 +337,79 @@ test('hud colours are derived and checked, not assumed', () => {
   }
   assert.ok(lum(panelFor(0x000000)) > 0, 'a black world gets a lighter panel, not an invisible one');
   assert.ok(lum(panelFor(0xffffff)) < 1, 'a white world gets a darker one');
+});
+
+test('textures: a verified image reaches the renderer, an unverified one does not', async () => {
+  await loadAll();
+
+  // A three-pixel PNG, built here rather than read from the repository: a test that depends
+  // on an art file breaks the day somebody redraws it.
+  const png = Uint8Array.from(atob(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg=='
+  ), (c) => c.charCodeAt(0));
+
+  const build = async ({ tamper = false } = {}) => {
+    const files = new Map();
+    const world = {
+      protocol_version: '0.1.0', id: 'painted', display_name: { en: 'Painted' },
+      bounds: { width: 64, height: 64 }, spawns: { default: { at: [0, 0] } },
+      entities: [{
+        id: 'wall', at: [8, 8],
+        components: [{ type: 'sprite', size: [16, 16], texture: 'art/wall.png' }],
+      }],
+    };
+    const worldBytes = new TextEncoder().encode(JSON.stringify(world));
+    files.set('/v0/worlds/painted/world.json', worldBytes);
+    files.set('/v0/worlds/painted/art/wall.png', png);
+
+    const manifest = {
+      registry_version: '0.1.0', protocol_version: '0.1.0', id: 'painted',
+      display_name: world.display_name,
+      files: [
+        { path: 'world.json', size: worldBytes.byteLength, sha256: await sha256Hex(worldBytes) },
+        {
+          path: 'art/wall.png',
+          size: png.byteLength,
+          sha256: tamper ? '0'.repeat(64) : await sha256Hex(png),
+        },
+      ],
+    };
+    const mBytes = new TextEncoder().encode(JSON.stringify(manifest));
+    files.set('/v0/worlds/painted/manifest.json', mBytes);
+
+    const index = {
+      registry_version: '0.1.0', protocol_version: '0.1.0',
+      generated_at: '2026-01-01T00:00:00Z',
+      worlds: [{
+        id: 'painted', display_name: world.display_name,
+        manifest: 'v0/worlds/painted/manifest.json', sha256: await sha256Hex(mBytes),
+      }],
+    };
+    files.set('/v0/index.json', new TextEncoder().encode(JSON.stringify(index)));
+
+    const registry = new Registry({
+      fetchBytes: async (url) => {
+        const path = new URL(url, 'http://registry.test/').pathname.replace('/v0/..', '');
+        const bytes = files.get(path) ?? files.get(`/v0${path}`);
+        if (!bytes) throw new Error(`${path}: HTTP 404`);
+        return bytes;
+      },
+    });
+    await registry.loadFrom('http://registry.test/v0');
+    return registry;
+  };
+
+  const good = await build();
+  assert.ok(good.has('painted'), `the painted world should load: ${[...good.rejected.values()]}`);
+  const url = good.assets('painted').get('art/wall.png');
+  assert.ok(url?.startsWith('data:image/png;base64,'), `expected a png data url, got ${url}`);
+
+  const rt = buildRuntime(good.world('painted'), [], good.assets('painted'));
+  assert.equal(rt.visuals[0].texture, url, 'the sprite carries the verified image');
+
+  // An image is bytes a package asked a client to render. It gets the same treatment as
+  // bytes a package asked it to obey.
+  const bad = await build({ tamper: true });
+  assert.ok(!bad.has('painted'), 'a world whose image fails its hash must not load');
+  assert.match(bad.rejected.get('painted'), /hash mismatch/);
 });

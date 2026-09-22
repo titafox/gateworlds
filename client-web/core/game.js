@@ -18,7 +18,7 @@ export const PLAYER_SIZE = 16;
 export const PLAYER_SPEED = 130;
 
 export class Game {
-  constructor({ registry, storage, locale = 'en', initialWorld = 'pastoral_village' }) {
+  constructor({ registry, storage, locale = 'en', initialWorld = 'yuelu_village' }) {
     this.registry = registry;
     this.catalog = new ItemCatalog();
     this.inventory = new Inventory();
@@ -74,7 +74,11 @@ export class Game {
     const at = this.registry.spawnPoint(worldId, spawnName);
     if (at === null) return false;
 
-    this.runtime = buildRuntime(this.registry.world(worldId), this.consumedIn(worldId));
+    this.runtime = buildRuntime(
+      this.registry.world(worldId),
+      this.consumedIn(worldId),
+      this.registry.assets(worldId),
+    );
     const p = coord(at);
     this.player.x = p.x;
     this.player.y = p.y;
