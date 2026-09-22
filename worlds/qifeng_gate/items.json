@@ -14,7 +14,7 @@
         "en": "The lowest grade. Cultivators spend it. Mortals see a stone."
       },
       "icon": {
-        "color": "#8fd8c8"
+        "color": "#8fb8a8"
       },
       "stack_limit": 99,
       "props": {
@@ -35,7 +35,7 @@
         "en": "A first-tier pill. A menial hand is issued two a year."
       },
       "icon": {
-        "color": "#d8a04a"
+        "color": "#c9a24a"
       },
       "stack_limit": 99,
       "props": {

@@ -20,7 +20,7 @@ const DIM_ON_DARK := Color("#7f8894")
 const DIM_ON_LIGHT := Color("#5a6069")
 ## The portal purple, already the game's colour for "a transition happened". Reused rather
 ## than inventing an accent: the HUD's transitions are the same kind of event.
-const SIGNAL := Color("#9b7fe0")
+const SIGNAL := Color("#8a76a6")
 
 const PAD := 8.0
 const ROW_HEIGHT := 28.0

@@ -14,7 +14,7 @@
         "en": "A handful of unhusked rice. Down here, that is a day."
       },
       "icon": {
-        "color": "#c9bd93"
+        "color": "#d8c98f"
       },
       "stack_limit": 99,
       "props": {
@@ -34,7 +34,7 @@
         "en": "Cut wood. Things that burn away are not worth much."
       },
       "icon": {
-        "color": "#6b4a2f"
+        "color": "#8a6a45"
       },
       "stack_limit": 99,
       "props": {

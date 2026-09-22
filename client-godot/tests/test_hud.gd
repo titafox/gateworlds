@@ -81,7 +81,7 @@ static func _rows(t, tree: SceneTree) -> void:
 	t.eq(rows[0]["origin"], "青霄山门",
 		"and says which world it came from -- the interesting fact about a travelling thing")
 	t.eq(rows[0]["count"], 1, "with its count")
-	t.eq(rows[0]["icon"], Color("#7fe08a"),
+	t.eq(rows[0]["icon"], Color("#6f9b5e"),
 		"the icon is the item's own colour, the same rectangle the world draws")
 
 	# Split stacks are separate in the save, so they are separate on screen. Collapsing them

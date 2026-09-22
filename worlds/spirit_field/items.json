@@ -14,7 +14,7 @@
         "en": "First-order, three years to ripen. The sect buys it, at the sect's price."
       },
       "icon": {
-        "color": "#7fe08a"
+        "color": "#6f9b5e"
       },
       "stack_limit": 99,
       "props": {
@@ -35,7 +35,7 @@
         "en": "Fire-natured. Handle it too long and your hands blister."
       },
       "icon": {
-        "color": "#e0603c"
+        "color": "#b2452f"
       },
       "stack_limit": 99,
       "props": {

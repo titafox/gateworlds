@@ -1,15 +1,15 @@
 {
   "protocol_version": "0.1.0",
-  "id": "qifeng_gate",
+  "id": "bridge_market",
   "display_name": {
-    "zh-CN": "岐峰门",
-    "en": "Forked Peak Sect",
-    "ru": "Врата Раздвоенной Вершины",
-    "ja": "岐峰門"
+    "zh-CN": "虹桥坊市",
+    "en": "Rainbow Bridge Market",
+    "ru": "Рынок у Радужного моста",
+    "ja": "虹橋の市"
   },
   "description": {
-    "zh-CN": "一个小门派的山门。收杂役，不问出身。",
-    "en": "The gate of a minor sect. It takes menial hands, and does not ask where they came from."
+    "zh-CN": "河两岸的市。桥上过船的时候，整条街都停下来看。",
+    "en": "A market on both banks. When a boat goes under the bridge, the whole street stops to watch."
   },
   "license": {
     "code": "0BSD",
@@ -19,24 +19,24 @@
     "width": 640,
     "height": 480
   },
-  "background": "#a9b3ad",
+  "background": "#d2c3a0",
   "spawns": {
     "default": {
       "at": [
-        300,
-        230
+        310,
+        140
       ]
     },
-    "from_stair": {
+    "from_village": {
       "at": [
-        280,
-        370
+        500,
+        160
       ]
     },
-    "from_field": {
+    "from_pastoral": {
       "at": [
-        280,
-        100
+        80,
+        160
       ]
     }
   },
@@ -54,8 +54,8 @@
             640,
             16
           ],
-          "color": "#6f7d74",
-          "z": -10
+          "color": "#8a7352",
+          "z": 0
         },
         {
           "type": "solid",
@@ -79,8 +79,8 @@
             640,
             16
           ],
-          "color": "#6f7d74",
-          "z": -10
+          "color": "#8a7352",
+          "z": 0
         },
         {
           "type": "solid",
@@ -104,8 +104,8 @@
             16,
             480
           ],
-          "color": "#6f7d74",
-          "z": -10
+          "color": "#8a7352",
+          "z": 0
         },
         {
           "type": "solid",
@@ -129,8 +129,8 @@
             16,
             480
           ],
-          "color": "#6f7d74",
-          "z": -10
+          "color": "#8a7352",
+          "z": 0
         },
         {
           "type": "solid",
@@ -142,228 +142,350 @@
       ]
     },
     {
-      "id": "pillar_west",
+      "id": "river",
       "at": [
-        240,
-        120
+        16,
+        200
       ],
       "components": [
         {
           "type": "sprite",
           "size": [
-            36,
-            180
+            608,
+            60
           ],
-          "z": 0,
-          "color": "#cfc7b4"
+          "color": "#8fa8ba",
+          "z": -6
+        }
+      ]
+    },
+    {
+      "id": "water_west",
+      "at": [
+        16,
+        200
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            236,
+            60
+          ],
+          "color": "#8fa8ba",
+          "z": -5
         },
         {
           "type": "solid",
           "size": [
-            36,
-            180
+            236,
+            60
           ]
         }
       ]
     },
     {
-      "id": "pillar_east",
+      "id": "water_east",
       "at": [
-        364,
-        120
+        388,
+        200
       ],
       "components": [
         {
           "type": "sprite",
           "size": [
-            36,
-            180
+            236,
+            60
           ],
-          "color": "#cfc7b4",
-          "z": 0
+          "color": "#8fa8ba",
+          "z": -5
         },
         {
           "type": "solid",
           "size": [
-            36,
-            180
+            236,
+            60
           ]
         }
       ]
     },
     {
-      "id": "lintel",
+      "id": "bridge_deck",
       "at": [
-        240,
-        96
+        252,
+        192
       ],
       "components": [
         {
           "type": "sprite",
           "size": [
-            160,
-            26
+            136,
+            76
           ],
-          "color": "#8c8779",
-          "z": -2
+          "color": "#a87f52",
+          "z": -4
         }
       ]
     },
     {
-      "id": "plaque",
+      "id": "rail_west",
       "at": [
-        286,
-        66
-      ],
-      "components": [
-        {
-          "type": "sprite",
-          "size": [
-            68,
-            24
-          ],
-          "color": "#6f9b84",
-          "z": -1
-        }
-      ]
-    },
-    {
-      "id": "bell",
-      "at": [
-        492,
-        150
-      ],
-      "components": [
-        {
-          "type": "sprite",
-          "size": [
-            28,
-            38
-          ],
-          "color": "#a8823f",
-          "z": 0
-        },
-        {
-          "type": "solid",
-          "size": [
-            28,
-            38
-          ]
-        }
-      ]
-    },
-    {
-      "id": "bell_post",
-      "at": [
-        486,
+        248,
         188
       ],
       "components": [
         {
           "type": "sprite",
           "size": [
-            40,
-            12
+            8,
+            84
           ],
-          "color": "#7d6a4e",
+          "color": "#8a6a45",
           "z": 0
         },
         {
           "type": "solid",
           "size": [
-            40,
-            12
+            8,
+            84
           ]
         }
       ]
     },
     {
-      "id": "stone_lion_w",
+      "id": "rail_east",
       "at": [
-        150,
-        230
+        384,
+        188
       ],
       "components": [
         {
           "type": "sprite",
           "size": [
-            30,
-            34
+            8,
+            84
           ],
-          "color": "#8c8779",
+          "color": "#8a6a45",
           "z": 0
         },
         {
           "type": "solid",
           "size": [
-            30,
-            34
+            8,
+            84
           ]
         }
       ]
     },
     {
-      "id": "stone_lion_e",
+      "id": "barge",
       "at": [
-        460,
-        230
+        96,
+        268
       ],
       "components": [
         {
           "type": "sprite",
           "size": [
-            30,
-            34
+            74,
+            26
           ],
-          "color": "#8c8779",
+          "color": "#8a6a45",
           "z": 0
         },
         {
           "type": "solid",
           "size": [
-            30,
-            34
+            74,
+            26
           ]
         }
       ]
     },
     {
-      "id": "spirit_stone_1",
+      "id": "stall_nw",
       "at": [
-        140,
+        80,
+        80
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            90,
+            60
+          ],
+          "color": "#b58f5c",
+          "z": 0
+        },
+        {
+          "type": "solid",
+          "size": [
+            90,
+            60
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stall_nc",
+      "at": [
+        210,
+        80
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            76,
+            56
+          ],
+          "color": "#b58f5c",
+          "z": 0
+        },
+        {
+          "type": "solid",
+          "size": [
+            76,
+            56
+          ]
+        }
+      ]
+    },
+    {
+      "id": "stall_ne",
+      "at": [
+        420,
+        70
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            110,
+            64
+          ],
+          "color": "#b58f5c",
+          "z": 0
+        },
+        {
+          "type": "solid",
+          "size": [
+            110,
+            64
+          ]
+        }
+      ]
+    },
+    {
+      "id": "awning_nw",
+      "at": [
+        80,
+        66
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            90,
+            14
+          ],
+          "color": "#b2452f",
+          "z": -1
+        }
+      ]
+    },
+    {
+      "id": "awning_ne",
+      "at": [
+        420,
+        56
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            110,
+            14
+          ],
+          "color": "#5b7186",
+          "z": -1
+        }
+      ]
+    },
+    {
+      "id": "stall_sw",
+      "at": [
+        120,
         330
       ],
       "components": [
         {
           "type": "sprite",
           "size": [
-            16,
-            16
+            90,
+            58
           ],
-          "color": "#8fb8a8",
-          "z": 1
+          "color": "#b58f5c",
+          "z": 0
         },
         {
-          "type": "pickup",
+          "type": "solid",
           "size": [
-            20,
-            20
-          ],
-          "offset": [
-            -2,
-            -2
-          ],
-          "item": "qifeng_gate:low_spirit_stone",
-          "count": 1,
-          "once": true
+            90,
+            58
+          ]
         }
       ]
     },
     {
-      "id": "qi_pill_1",
+      "id": "stall_se",
       "at": [
-        500,
-        330
+        430,
+        340
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            100,
+            56
+          ],
+          "color": "#b58f5c",
+          "z": 0
+        },
+        {
+          "type": "solid",
+          "size": [
+            100,
+            56
+          ]
+        }
+      ]
+    },
+    {
+      "id": "awning_sw",
+      "at": [
+        120,
+        316
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            90,
+            14
+          ],
+          "color": "#5b7186",
+          "z": -1
+        }
+      ]
+    },
+    {
+      "id": "talisman_1",
+      "at": [
+        300,
+        108
       ],
       "components": [
         {
@@ -385,51 +507,56 @@
             -2,
             -2
           ],
-          "item": "qifeng_gate:qi_gathering_pill",
+          "item": "bridge_market:talisman_paper",
           "count": 1,
           "once": true
         }
       ]
     },
     {
-      "id": "down_to_stair",
+      "id": "tea_1",
       "at": [
-        280,
-        410
+        330,
+        384
       ],
       "components": [
         {
           "type": "sprite",
           "size": [
-            80,
-            54
+            16,
+            16
           ],
-          "color": "#8a76a6",
+          "color": "#6f9b5e",
           "z": 1
         },
         {
-          "type": "portal",
+          "type": "pickup",
           "size": [
-            80,
-            54
+            20,
+            20
           ],
-          "target_world": "cloud_stair",
-          "target_spawn": "from_gate"
+          "offset": [
+            -2,
+            -2
+          ],
+          "item": "bridge_market:spirit_tea",
+          "count": 1,
+          "once": true
         }
       ]
     },
     {
-      "id": "in_to_field",
+      "id": "road_east",
       "at": [
-        280,
-        22
+        568,
+        90
       ],
       "components": [
         {
           "type": "sprite",
           "size": [
-            80,
-            54
+            56,
+            64
           ],
           "color": "#8a76a6",
           "z": 1
@@ -437,11 +564,38 @@
         {
           "type": "portal",
           "size": [
-            80,
-            54
+            56,
+            64
           ],
-          "target_world": "spirit_field",
-          "target_spawn": "from_gate"
+          "target_world": "yuelu_village",
+          "target_spawn": "from_market"
+        }
+      ]
+    },
+    {
+      "id": "road_west",
+      "at": [
+        16,
+        90
+      ],
+      "components": [
+        {
+          "type": "sprite",
+          "size": [
+            48,
+            64
+          ],
+          "color": "#8a76a6",
+          "z": 1
+        },
+        {
+          "type": "portal",
+          "size": [
+            48,
+            64
+          ],
+          "target_world": "pastoral_village",
+          "target_spawn": "default"
         }
       ]
     }

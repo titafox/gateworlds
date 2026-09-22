@@ -37,9 +37,16 @@ export class SceneView {
     this.scene = new THREE.Scene();
     this.camera = new THREE.PerspectiveCamera(52, 1, 1, 4000);
 
-    this.scene.add(new THREE.AmbientLight(0xffffff, 1.6));
-    const key = new THREE.DirectionalLight(0xffffff, 1.7);
-    key.position.set(-0.4, 1, 0.55);
+    // Almost flat, on purpose.
+    //
+    // The protocol's visual vocabulary is a filled rectangle: no gradients, no highlights,
+    // no light source. Shading boxes hard invents a sun the data never mentioned and makes
+    // one face of every wall a colour the world did not choose. A little directional light
+    // is kept so the extrusion still reads as depth -- that is this client's whole
+    // distinguishing move -- but not enough to repaint anything.
+    this.scene.add(new THREE.AmbientLight(0xffffff, 2.5));
+    const key = new THREE.DirectionalLight(0xffffff, 0.45);
+    key.position.set(-0.35, 1, 0.5);
     this.scene.add(key);
 
     this.worldGroup = new THREE.Group();
@@ -49,7 +56,15 @@ export class SceneView {
       new THREE.BoxGeometry(16, PLAYER_HEIGHT, 16),
       new THREE.MeshLambertMaterial({ color: 0xf2e9d8 }),
     );
+    // The one thing that must never be hard to find. Its fill was a fixed off-white, which
+    // is invisible the moment somebody writes a world on pale ground -- and a figure you
+    // cannot locate is a worse bug than anything in the scenery.
+    this.playerOutline = new THREE.LineSegments(
+      new THREE.EdgesGeometry(this.player.geometry),
+      new THREE.LineBasicMaterial({ color: 0x3a3630 }),
+    );
     this.scene.add(this.player);
+    this.scene.add(this.playerOutline);
 
     this.bobbing = [];
     this.bounds = { w: VISIBLE_WIDTH, h: VISIBLE_DEPTH };
@@ -57,6 +72,7 @@ export class SceneView {
     // should not pay for its art twice.
     this.textures = new Map();
     this.loader = new THREE.TextureLoader();
+    this.inkColor = 0x3a3630;
     this.resize();
   }
 
@@ -77,6 +93,16 @@ export class SceneView {
     this.worldGroup.clear();
 
     const ground = new THREE.Color(runtime.background.hex);
+    const luminance = 0.2126 * ground.r + 0.7152 * ground.g + 0.0722 * ground.b;
+    // Never pure black: ink on silk is a warm dark grey, and a true black line against a
+    // painted ground reads as a hole rather than a stroke.
+    this.inkColor = luminance > 0.45 ? 0x3a3630 : 0xc8bfa8;
+
+    // Pale ground, dark figure; dark ground, pale figure. Derived rather than chosen, so it
+    // holds for a world nobody has written yet.
+    this.player.material.color.setHex(luminance > 0.45 ? 0x4a4335 : 0xf2e9d8);
+    this.playerOutline.material.color.setHex(luminance > 0.45 ? 0x2b271f : 0x8a8270);
+
     this.scene.background = ground;
     this.scene.fog = new THREE.Fog(runtime.background.hex, 280, 820);
 
@@ -110,10 +136,26 @@ export class SceneView {
       );
       mesh.position.set(v.centre.x, height / 2, v.centre.y);
       this.worldGroup.add(mesh);
+      this.#outline(mesh);
 
       // The only motion in the scene, and it marks the two things that respond to you.
       if (kind) this.bobbing.push({ mesh, base: height / 2, phase: v.centre.x + v.centre.y });
     }
+  }
+
+  /// Draws the edges of a box as lines.
+  ///
+  /// A flat fill with a drawn contour is how ruled-line architectural painting works, and it
+  /// is also what makes an unshaded box read as a solid rather than as a smear. The colour
+  /// is derived from the world's own ground so that the line stays visible whatever a
+  /// contributor picks -- ink on a pale world, chalk on a dark one.
+  #outline(mesh) {
+    const lines = new THREE.LineSegments(
+      new THREE.EdgesGeometry(mesh.geometry),
+      new THREE.LineBasicMaterial({ color: this.inkColor, transparent: true, opacity: 0.55 }),
+    );
+    lines.position.copy(mesh.position);
+    this.worldGroup.add(lines);
   }
 
   /// Loads a texture once per URL.
@@ -135,6 +177,7 @@ export class SceneView {
 
   render(player, elapsed) {
     this.player.position.set(player.x + 8, PLAYER_HEIGHT / 2, player.y + 8);
+    this.playerOutline.position.copy(this.player.position);
 
     // Bobbing only, never spinning. A rotating box changes its apparent footprint while its
     // trigger rectangle stays put, so it would advertise a way in at the corners that does

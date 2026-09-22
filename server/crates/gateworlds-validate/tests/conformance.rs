@@ -311,3 +311,66 @@ fn no_spawn_point_sits_inside_something_solid() {
     assert!(checked >= 2, "expected several spawns, checked {checked}");
     assert!(problems.is_empty(), "spawns inside walls:\n{problems}");
 }
+
+/// Every shipped world is reachable on foot from the one the game opens in.
+///
+/// An orphaned world validates, publishes and appears in the registry, and no player ever
+/// sees it. That is not a protocol error -- a world could reasonably be reachable only from
+/// a world-select screen, which does not exist yet -- so this is a repository rule rather
+/// than a schema one. While walking is the only way to get anywhere, a world nobody can
+/// walk to is a world that was forgotten rather than one that was placed.
+#[test]
+fn every_shipped_world_can_be_walked_to_from_the_starting_world() {
+    const START: &str = "yuelu_village";
+
+    let worlds = repo_root().join("worlds");
+    let mut links: std::collections::BTreeMap<String, Vec<String>> = Default::default();
+
+    let mut dirs: Vec<PathBuf> = std::fs::read_dir(&worlds)
+        .expect("worlds/ should exist")
+        .flatten()
+        .map(|e| e.path())
+        .filter(|p| p.is_dir())
+        .collect();
+    dirs.sort();
+
+    for dir in &dirs {
+        let doc: Value = serde_json::from_str(
+            &std::fs::read_to_string(dir.join("world.json")).expect("readable"),
+        )
+        .expect("json");
+        let id = doc["id"].as_str().unwrap_or_default().to_string();
+        let mut out = Vec::new();
+        for entity in doc["entities"].as_array().into_iter().flatten() {
+            for component in entity["components"].as_array().into_iter().flatten() {
+                if component["type"] == "portal" {
+                    if let Some(to) = component["target_world"].as_str() {
+                        out.push(to.to_string());
+                    }
+                }
+            }
+        }
+        links.insert(id, out);
+    }
+
+    assert!(
+        links.contains_key(START),
+        "the starting world {START} is not shipped"
+    );
+
+    let mut reached: std::collections::BTreeSet<String> = [START.to_string()].into();
+    let mut queue = vec![START.to_string()];
+    while let Some(current) = queue.pop() {
+        for next in links.get(&current).into_iter().flatten() {
+            if links.contains_key(next) && reached.insert(next.clone()) {
+                queue.push(next.clone());
+            }
+        }
+    }
+
+    let orphaned: Vec<&String> = links.keys().filter(|id| !reached.contains(*id)).collect();
+    assert!(
+        orphaned.is_empty(),
+        "no portal chain from {START} reaches: {orphaned:?}"
+    );
+}

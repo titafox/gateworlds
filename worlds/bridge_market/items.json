@@ -1,0 +1,46 @@
+{
+  "protocol_version": "0.1.0",
+  "items": [
+    {
+      "id": "bridge_market:talisman_paper",
+      "display_name": {
+        "zh-CN": "符纸",
+        "en": "Talisman Paper",
+        "ru": "Бумага для талисманов",
+        "ja": "符紙"
+      },
+      "description": {
+        "zh-CN": "黄麻纸，一刀十张。画坏了就是废纸。",
+        "en": "Hemp paper, ten to a stack. Draw it wrong and it is paper."
+      },
+      "icon": {
+        "color": "#c9a24a"
+      },
+      "stack_limit": 99,
+      "props": {
+        "sheets": 10,
+        "grade": "黄麻"
+      }
+    },
+    {
+      "id": "bridge_market:spirit_tea",
+      "display_name": {
+        "zh-CN": "灵茶",
+        "en": "Spirit Tea",
+        "ru": "Духовный чай",
+        "ja": "霊茶"
+      },
+      "description": {
+        "zh-CN": "桥头茶肆卖的。修士喝着提神，凡人喝着也就是茶。",
+        "en": "Sold at the stall by the bridge. It clears a cultivator's head. For anyone else it is tea."
+      },
+      "icon": {
+        "color": "#6f9b5e"
+      },
+      "stack_limit": 99,
+      "props": {
+        "spirit_qi": 1
+      }
+    }
+  ]
+}
