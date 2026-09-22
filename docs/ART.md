@@ -188,6 +188,30 @@ the same way or none of them, or it stops meaning anything.
 |---|---|---|
 | any portal | pale violet talisman paper, seal-script strokes dissolving at the edges | `#8a76a6` |
 
+## Water, pits, and anything solid that should look flat
+
+The browser client stands solid things up, because `solid` is the protocol's word for "this
+blocks you" and a thing that blocks you should look like it does. That is right for a wall
+and wrong for a river: water stops you and is not a slab.
+
+Components are independent, which is the answer. An entity may carry a `solid` with **no
+`sprite`** — an invisible barrier — while a separate flat entity draws what the place looks
+like:
+
+```jsonc
+// what it looks like: a flat sprite, no solid
+{ "id": "river", "at": [16, 200], "components": [
+    { "type": "sprite", "size": [608, 60], "color": "#8fa8ba", "z": -6 } ] },
+
+// what it does: solids with no sprite, leaving a gap where the bridge crosses
+{ "id": "water_west", "at": [16, 200],  "components": [ { "type": "solid", "size": [236, 60] } ] },
+{ "id": "water_east", "at": [388, 200], "components": [ { "type": "solid", "size": [236, 60] } ] },
+```
+
+Nothing was added to the protocol to allow this. Separating how a thing looks from what it
+does is what having components instead of object types buys you, and it was there from
+0.1.0 without anybody noticing.
+
 ## What the protocol cannot do yet
 
 Worth knowing before you draw for it:
